@@ -19,7 +19,7 @@ public class ItemRepositoryInMemory implements ItemRepository {
 
     @Override
     public Item save(Item item) {
-        if(item.getId() == null) {
+        if (item.getId() == null) {
             item.setId(++id);
 
             itemsById.put(item.getId(), item);
@@ -34,7 +34,7 @@ public class ItemRepositoryInMemory implements ItemRepository {
 
     @Override
     public Item findById(int id) {
-        if(!itemsById.containsKey(id)) {
+        if (!itemsById.containsKey(id)) {
             log.error("Item with ID {} does not exist", id);
             throw new RuntimeException("Item does not exist");
         }
@@ -51,7 +51,7 @@ public class ItemRepositoryInMemory implements ItemRepository {
 
     @Override
     public void remove(int id) {
-        if(!itemsById.containsKey(id)) {
+        if (!itemsById.containsKey(id)) {
             log.error("Item with ID {} does not exist", id);
             throw new RuntimeException("Item does not exist");
         }

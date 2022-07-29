@@ -28,7 +28,7 @@ public class UserController {
     @PostMapping
     private UserDto create(@Valid @RequestBody UserDto userDto,
                            BindingResult result) {
-        if(result.getErrorCount() != 0) {
+        if (result.getErrorCount() != 0) {
             log.error("Validation errors: {}", result.getAllErrors());
             throw new ValidationException();
         }
@@ -37,10 +37,10 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    private UserDto update( @Validated(NullAllowed.class) @RequestBody UserDto userDto,
-                            @PathVariable("id") int id,
-                            BindingResult result) {
-        if(result.getErrorCount() != 0) {
+    private UserDto update(@Validated(NullAllowed.class) @RequestBody UserDto userDto,
+                           @PathVariable("id") int id,
+                           BindingResult result) {
+        if (result.getErrorCount() != 0) {
             log.error("Validation errors: {}", result.getAllErrors());
             throw new ValidationException();
         }

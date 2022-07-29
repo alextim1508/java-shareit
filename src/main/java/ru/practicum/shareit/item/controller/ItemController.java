@@ -27,10 +27,10 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    private ItemDto create(@RequestHeader(value="X-Sharer-User-Id") int userId,
+    private ItemDto create(@RequestHeader(value = "X-Sharer-User-Id") int userId,
                            @Valid @RequestBody ItemDto itemDto,
                            BindingResult result) {
-        if(result.getErrorCount() != 0) {
+        if (result.getErrorCount() != 0) {
             log.error("Validation errors: {}", result.getAllErrors());
             throw new ValidationException();
         }
@@ -40,10 +40,10 @@ public class ItemController {
 
     @PatchMapping("/{id}")
     private ItemDto update(@PathVariable("id") int id,
-                           @RequestHeader(value="X-Sharer-User-Id") int userId,
+                           @RequestHeader(value = "X-Sharer-User-Id") int userId,
                            @Validated(NullAllowed.class) @RequestBody ItemDto itemDto,
                            BindingResult result) {
-        if(result.getErrorCount() != 0) {
+        if (result.getErrorCount() != 0) {
             log.error("Validation errors: {}", result.getAllErrors());
             throw new ValidationException();
         }
@@ -62,7 +62,7 @@ public class ItemController {
     }
 
     @GetMapping
-    private List<ItemDto> getAll(@RequestHeader(value="X-Sharer-User-Id") int userId) {
+    private List<ItemDto> getAll(@RequestHeader(value = "X-Sharer-User-Id") int userId) {
         return itemService.getAll(userId).stream().map(ItemDto::toItemDto).collect(Collectors.toList());
     }
 

@@ -33,9 +33,9 @@ public class UserServiceImpl implements UserService {
     public User update(int id, UserDto userDto) {
         User user = getById(id);
 
-        if(userDto.getName() != null)
+        if (userDto.getName() != null)
             user.setName(userDto.getName());
-        if(userDto.getEmail() != null)
+        if (userDto.getEmail() != null)
             user.setEmail(userDto.getEmail());
 
         return repo.save(user);

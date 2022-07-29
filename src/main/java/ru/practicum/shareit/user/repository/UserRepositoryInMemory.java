@@ -17,8 +17,8 @@ public class UserRepositoryInMemory implements UserRepository {
 
     @Override
     public User save(User user) {
-        if(user.getId() == null) {
-            if(uniqEmails.contains(user.getEmail())) {
+        if (user.getId() == null) {
+            if (uniqEmails.contains(user.getEmail())) {
                 log.error("Email of {} already exists", user);
                 throw new RuntimeException("Email already exists");
             }
@@ -30,7 +30,7 @@ public class UserRepositoryInMemory implements UserRepository {
         } else {
             String oldEmail = findById(user.getId()).getEmail();
 
-            if(uniqEmails.contains(user.getEmail()) && !oldEmail.equals(user.getEmail())) {
+            if (uniqEmails.contains(user.getEmail()) && !oldEmail.equals(user.getEmail())) {
                 log.error("Email of {} already exists", user);
                 throw new RuntimeException("Email already exists");
             }
@@ -46,14 +46,14 @@ public class UserRepositoryInMemory implements UserRepository {
 
     @Override
     public User findById(int id) {
-        if(!usersById.containsKey(id)) {
+        if (!usersById.containsKey(id)) {
             log.error("User with ID {} does not exist", id);
             throw new IllegalStateException("User does not exist");
         }
 
         User userById = usersById.get(id);
         log.info("{} is found", userById);
-        return new User(userById.getId(), userById.getName(),userById.getEmail());
+        return new User(userById.getId(), userById.getName(), userById.getEmail());
     }
 
     @Override
@@ -63,7 +63,7 @@ public class UserRepositoryInMemory implements UserRepository {
 
     @Override
     public void remove(int id) {
-        if(!usersById.containsKey(id)) {
+        if (!usersById.containsKey(id)) {
             log.error("User with ID {} does not exist", id);
             throw new IllegalStateException("User does not exist");
         }
