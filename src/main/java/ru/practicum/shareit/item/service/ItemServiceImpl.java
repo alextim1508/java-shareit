@@ -14,11 +14,12 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.util.exception.ActionIsNotAvailableException;
 import ru.practicum.shareit.util.exception.ForbiddenException;
-import ru.practicum.shareit.util.exception.ItemIsNotAvailableException;
 import ru.practicum.shareit.util.exception.ResourceNotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +37,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void checkingUserForExistence(int id) {
-        if(!userRepo.existsById(id))
+        if (!userRepo.existsById(id))
             throw new ResourceNotFoundException();
     }
 
@@ -106,9 +107,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void check(Set<Booking> bookings, int authorId) {
-        if(bookings == null || bookings.isEmpty())
+        if (bookings == null || bookings.isEmpty())
             throw new ActionIsNotAvailableException();
-        else if(bookings.stream().noneMatch(booking ->
+        else if (bookings.stream().noneMatch(booking ->
                 booking.getBooker().getId().equals(authorId) &&
                         booking.getStatus().equals(BookingStatus.APPROVED) &&
                         booking.getEndDate().isBefore(LocalDateTime.now())))

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.ToString;
 import ru.practicum.shareit.booking.controller.NearestBookingDto;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.Collections;
@@ -30,16 +29,16 @@ public class ItemDtoWithNearestBooking extends ItemDto {
     public ItemDtoWithNearestBooking(Item item,
                                      Booking lastBooking,
                                      Booking nextBooking) {
-        super(  item.getId(),
+        super(item.getId(),
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
                 item.getRequest() != null ? item.getRequest().getId() : null);
-        if(lastBooking != null)
+        if (lastBooking != null)
             this.lastBooking = toNearestBookingDto(lastBooking);
-        if(nextBooking != null)
+        if (nextBooking != null)
             this.nextBooking = toNearestBookingDto(nextBooking);
-        if(item.getComments() != null && !item.getComments().isEmpty())
+        if (item.getComments() != null && !item.getComments().isEmpty())
             this.comments = item.getComments().stream().map(CommentDto::toCommentDto).collect(Collectors.toList());
         else
             this.comments = Collections.emptyList();

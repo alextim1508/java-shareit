@@ -60,7 +60,7 @@ public class ItemController {
         Booking lastBooking = null;
         Booking nextBooking = null;
 
-        if(bookings!= null && !bookings.isEmpty() && byId.getOwner().getId().equals(ownerId)) {
+        if (bookings != null && !bookings.isEmpty() && byId.getOwner().getId().equals(ownerId)) {
             lastBooking = getLastBooking(bookings, now);
             nextBooking = getNextBooking(bookings, now);
         }
@@ -86,7 +86,7 @@ public class ItemController {
             Booking lastBooking = null;
             Booking nextBooking = null;
 
-            if(bookings!= null && !bookings.isEmpty() && item.getOwner().getId().equals(userId)) {
+            if (bookings != null && !bookings.isEmpty() && item.getOwner().getId().equals(userId)) {
                 lastBooking = getLastBooking(bookings, now);
                 nextBooking = getNextBooking(bookings, now);
             }
