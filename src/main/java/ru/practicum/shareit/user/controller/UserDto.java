@@ -3,7 +3,7 @@ package ru.practicum.shareit.user.controller;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.util.NullAllowed;
+import ru.practicum.shareit.util.validator.NullAllowed;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

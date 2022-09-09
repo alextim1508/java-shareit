@@ -6,7 +6,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.service.UserService;
-import ru.practicum.shareit.util.NullAllowed;
+import ru.practicum.shareit.util.validator.NullAllowed;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
@@ -36,6 +36,16 @@ public class UserController {
         return toUserDto(userService.create(toUser(userDto)));
     }
 
+    @GetMapping("/{id}")
+    private UserDto getById(@PathVariable("id") int id) {
+        return toUserDto(userService.getById(id));
+    }
+
+    @GetMapping
+    private List<UserDto> getAll() {
+        return userService.getAll().stream().map(UserDto::toUserDto).collect(Collectors.toList());
+    }
+
     @PatchMapping("/{id}")
     private UserDto update(@Validated(NullAllowed.class) @RequestBody UserDto userDto,
                            @PathVariable("id") int id,
@@ -46,16 +56,6 @@ public class UserController {
         }
 
         return toUserDto(userService.update(id, userDto));
-    }
-
-    @GetMapping("/{id}")
-    private UserDto getById(@PathVariable("id") int id) {
-        return toUserDto(userService.getById(id));
-    }
-
-    @GetMapping
-    private List<UserDto> getAll() {
-        return userService.getAll().stream().map(UserDto::toUserDto).collect(Collectors.toList());
     }
 
     @DeleteMapping("/{id}")
