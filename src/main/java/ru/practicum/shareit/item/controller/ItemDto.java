@@ -1,21 +1,27 @@
 package ru.practicum.shareit.item.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import ru.practicum.shareit.item.model.Item;
+import lombok.NoArgsConstructor;
+import ru.practicum.shareit.booking.controller.ShortBookingDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+
 
 @Data
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class ItemDto {
 
     private Integer id;
 
-    @NotEmpty
     @NotBlank
+    @NotEmpty
     @NotNull
     private String name;
 
@@ -29,22 +35,9 @@ public class ItemDto {
 
     private Integer requestId;
 
-    public static ItemDto toItemDto(Item item) {
-        return new ItemDto(
-                item.getId(),
-                item.getName(),
-                item.getDescription(),
-                item.getAvailable(),
-                item.getRequestId()
-        );
-    }
+    private ShortBookingDto nextBooking;
 
-    public static Item toItem(ItemDto dto, int ownerId) {
-        return new Item(
-                dto.getName(),
-                dto.getDescription(),
-                dto.getAvailable(),
-                ownerId
-        );
-    }
+    private ShortBookingDto lastBooking;
+
+    private List<CommentDto> comments;
 }

@@ -1,80 +1,144 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.item.controller.ItemDto;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.util.exception.ActionIsNotAvailableException;
+import ru.practicum.shareit.util.exception.ForbiddenException;
+import ru.practicum.shareit.util.exception.NotFoundException;
 
-import java.util.Collection;
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
+
+import static ru.practicum.shareit.booking.service.BookingServiceImpl.getLastBooking;
+import static ru.practicum.shareit.booking.service.BookingServiceImpl.getNextBooking;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepo;
-    private final UserRepository userRepo;
+
+    private final CommentRepository commentRepo;
+
+    private final UserService userService;
+
+    private final ItemMapper itemMapper;
 
     @Override
     public Item create(Item item) {
-        checkingUserForExistence(item.getOwnerId());
-        return itemRepo.save(item);
+        userService.existenceCheck(item.getOwner().getId());
+
+        Item savedItem = itemRepo.save(item);
+        log.info("{} is saved", savedItem);
+        return savedItem;
     }
 
-    private void checkingUserForExistence(int id) {
-        userRepo.findById(id);
+    @Transactional
+    @Override
+    public Item getById(int id, int userId) {
+        Optional<Item> item = itemRepo.findById(id);
+        if (item.isEmpty()) {
+            log.warn("The item with ID {} is not found", id);
+            throw new NotFoundException("Item with ID " + id + " is not found");
+        }
+
+        int forLoading = item.get().getBookings().size();
+
+        if (item.get().getOwner().getId().equals(userId)) {
+            LocalDateTime now = LocalDateTime.now();
+            item.get().setLastBooking(getLastBooking(item.get(), now));
+            item.get().setNextBooking(getNextBooking(item.get(), now));
+        }
+
+        forLoading = item.get().getComments().size();
+
+        log.info("{} is found", item.get());
+        return item.get();
     }
 
     @Override
-    public Collection<Item> getAll(int userId) {
-        return itemRepo.findAll().stream().filter(item -> item.getOwnerId() == userId).collect(Collectors.toList());
+    public List<Item> getAvailableItemByOwner(int ownerId) {
+        List<Item> items = itemRepo.findByOwner(ownerId);
+        LocalDateTime now = LocalDateTime.now();
+        items.forEach(item -> {
+            if (item.getOwner().getId().equals(ownerId)) {
+                item.setLastBooking(getLastBooking(item, now));
+                item.setNextBooking(getNextBooking(item, now));
+            }
+        });
+
+        log.info("Founded {} items by owner with ID {}", items.size(), ownerId);
+        return items;
     }
 
     @Override
-    public Collection<Item> getAll(String pattern, Boolean isAvailable) {
+    public List<Item> getAvailableItemByPattern(String pattern) {
         if (pattern == null || pattern.isBlank() || pattern.isEmpty())
             return Collections.emptyList();
 
-        String lowerCasePattern = pattern.toLowerCase();
-        return itemRepo.findAll().stream().filter(item ->
-                        item.getAvailable() && (
-                                item.getName().toLowerCase().contains(lowerCasePattern) ||
-                                        item.getDescription().toLowerCase().contains(lowerCasePattern)
-                        ))
-                .collect(Collectors.toList());
+        List<Item> items = itemRepo.findAvailableItemsByNameOrDescription(pattern);
+        log.info("Founded {} items by pattern {}", items.size(), pattern);
+        return items;
     }
 
     @Override
-    public Item getById(int id) {
-        return itemRepo.findById(id);
-    }
-
-    @Override
+    @Transactional
     public Item update(int id, ItemDto itemDto, int userId) {
-        Item item = getById(id);
+        Item item = getById(id, userId);
 
-        checkingUserForOwnership(item.getOwnerId(), userId);
+        if (item.getOwner().getId() != userId) {
+            log.info("User with ID {} cannot change {}. Only owner can do it", userId, itemDto);
+            throw new ForbiddenException();
+        }
 
-        if (itemDto.getName() != null)
-            item.setName(itemDto.getName());
-        if (itemDto.getDescription() != null)
-            item.setDescription(itemDto.getDescription());
-        if (itemDto.getAvailable() != null)
-            item.setAvailable(itemDto.getAvailable());
+        itemMapper.updateItemFromDto(itemDto, item);
 
-        return itemRepo.save(item);
-    }
+        log.info("{} is updated", item);
 
-    private void checkingUserForOwnership(int ownerId, int userId) {
-        if (ownerId != userId)
-            throw new IllegalStateException();
+        return item;
     }
 
     @Override
     public void delete(int id) {
-        itemRepo.remove(id);
+        try {
+            itemRepo.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException("Item with ID " + id + " is not found");
+        }
+        log.info("Item with ID {} is removed", id);
+    }
+
+    @Override
+    public Comment create(Comment comment) {
+        bookingCheck(comment.getItem(), comment.getAuthor().getId());
+
+        Comment savedComment = commentRepo.save(comment);
+
+        log.info("{} is saved", savedComment);
+
+        return savedComment;
+    }
+
+    private void bookingCheck(Item item, int authorId) {
+        if (item.getBookings() == null || item.getBookings().stream().noneMatch(booking ->
+                booking.getBooker().getId().equals(authorId) &&
+                        booking.getStatus().equals(BookingStatus.APPROVED) &&
+                        booking.getEndDate().isBefore(LocalDateTime.now()))) {
+            log.warn("User with ID {} did not book {}", authorId, item);
+            throw new ActionIsNotAvailableException();
+        }
     }
 }

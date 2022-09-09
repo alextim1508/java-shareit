@@ -1,9 +1,7 @@
 package ru.practicum.shareit.user.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.util.NullAllowed;
+import lombok.*;
+import ru.practicum.shareit.util.validator.NullAllowed;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -12,7 +10,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserDto {
 
     private Integer id;
@@ -25,19 +25,4 @@ public class UserDto {
     @Email(groups = {NullAllowed.class, Default.class})
     @NotNull(groups = {Default.class})
     private String email;
-
-    public static UserDto toUserDto(User user) {
-        return new UserDto(
-                user.getId(),
-                user.getName(),
-                user.getEmail()
-        );
-    }
-
-    public static User toUser(UserDto dto) {
-        return new User(
-                dto.getName(),
-                dto.getEmail()
-        );
-    }
 }

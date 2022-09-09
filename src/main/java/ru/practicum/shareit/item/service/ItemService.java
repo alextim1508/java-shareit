@@ -1,19 +1,22 @@
 package ru.practicum.shareit.item.service;
 
 import ru.practicum.shareit.item.controller.ItemDto;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface ItemService {
 
     Item create(Item item);
 
-    Collection<Item> getAll(int userId);
+    Comment create(Comment comment);
 
-    Collection<Item> getAll(String pattern, Boolean isAvailable);
+    Item getById(int id, int ownerId);
 
-    Item getById(int id);
+    List<Item> getAvailableItemByOwner(int userId);
+
+    List<Item> getAvailableItemByPattern(String pattern);
 
     Item update(int id, ItemDto itemDto, int userId);
 
