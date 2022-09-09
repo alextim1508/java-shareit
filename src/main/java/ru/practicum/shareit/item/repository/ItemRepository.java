@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 
-    @Query("select i from Item i where i.owner.id = :ownerId" )
+    @Query("select i from Item i where i.owner.id = :ownerId")
     List<Item> getItemByOwner(@Param("ownerId") int ownerId);
 
     List<Item> findByNameContainingIgnoreCaseAndAvailableTrueOrDescriptionContainingIgnoreCaseAndAvailableTrue(String name, String description);
