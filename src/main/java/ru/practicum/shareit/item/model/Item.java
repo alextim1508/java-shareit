@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+@Table(name = "items")
 @Entity
 @Data
 @NoArgsConstructor

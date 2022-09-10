@@ -7,7 +7,7 @@ import ru.practicum.shareit.user.model.User;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-
+@Table(name = "bookings")
 @Entity
 @Data
 @NoArgsConstructor

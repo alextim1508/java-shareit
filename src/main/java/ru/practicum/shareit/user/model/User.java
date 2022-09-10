@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(schema = "public", name = "user")
+@Table(name = "users")
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor

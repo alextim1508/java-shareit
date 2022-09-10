@@ -1,14 +1,16 @@
 package ru.practicum.shareit.requests.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "request")
+@Table(name = "requests")
 @Data
+@NoArgsConstructor
 public class ItemRequest {
 
     @Id
@@ -25,4 +27,5 @@ public class ItemRequest {
     public ItemRequest(Integer id) {
         this.id = id;
     }
+
 }
