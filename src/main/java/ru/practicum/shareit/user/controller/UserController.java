@@ -23,10 +23,10 @@ import static ru.practicum.shareit.user.controller.UserDto.toUserDto;
 @Slf4j
 public class UserController {
 
-    private final UserService userService;
+    public final UserService userService;
 
     @PostMapping
-    private UserDto create(@Valid @RequestBody UserDto userDto,
+    public UserDto create(@Valid @RequestBody UserDto userDto,
                            BindingResult result) {
         if (result.getErrorCount() != 0) {
             log.error("Validation errors: {}", result.getAllErrors());
@@ -37,17 +37,17 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    private UserDto getById(@PathVariable("id") int id) {
+    public UserDto getById(@PathVariable("id") int id) {
         return toUserDto(userService.getById(id));
     }
 
     @GetMapping
-    private List<UserDto> getAll() {
+    public List<UserDto> getAll() {
         return userService.getAll().stream().map(UserDto::toUserDto).collect(Collectors.toList());
     }
 
     @PatchMapping("/{id}")
-    private UserDto update(@Validated(NullAllowed.class) @RequestBody UserDto userDto,
+    public UserDto update(@Validated(NullAllowed.class) @RequestBody UserDto userDto,
                            @PathVariable("id") int id,
                            BindingResult result) {
         if (result.getErrorCount() != 0) {
@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    private void delete(@PathVariable("id") int id) {
+    public void delete(@PathVariable("id") int id) {
         userService.delete(id);
     }
 }

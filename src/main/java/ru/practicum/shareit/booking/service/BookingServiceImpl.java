@@ -74,7 +74,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Collection<Booking> getBookingByBookerAndStatus(int userId) {
+    public Collection<Booking> getPastBookingByBooker(int userId) {
         userService.getById(userId);
         return bookingRepository.getPastBookingByBooker(userId);
     }
@@ -104,7 +104,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Collection<Booking> getBookingByOwnerAndStatus(int userId) {
+    public Collection<Booking> getPastBookingByOwner(int userId) {
         userService.getById(userId);
         return bookingRepository.getPastBookingByOwner(userId);
     }

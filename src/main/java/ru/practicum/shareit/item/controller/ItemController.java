@@ -33,10 +33,10 @@ import static ru.practicum.shareit.item.controller.ItemDto.toItemDto;
 @Slf4j
 public class ItemController {
 
-    private final ItemService itemService;
+    public final ItemService itemService;
 
     @PostMapping
-    private ItemDto create(@RequestHeader(value = "X-Sharer-User-Id") int ownerId,
+    public ItemDto create(@RequestHeader(value = "X-Sharer-User-Id") int ownerId,
                            @Valid @RequestBody ItemDto itemDto,
                            BindingResult result) {
         if (result.getErrorCount() != 0) {
@@ -48,7 +48,7 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    private ItemDtoWithNearestBooking getById(@RequestHeader(value = "X-Sharer-User-Id") int ownerId,
+    public ItemDtoWithNearestBooking getById(@RequestHeader(value = "X-Sharer-User-Id") int ownerId,
                                               @PathVariable("id") int id) {
 
         LocalDateTime now = LocalDateTime.now();
@@ -69,16 +69,17 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    private List<ItemDto> search(@RequestParam("text") String pattern) {
+    public List<ItemDto> search(@RequestParam("text") String pattern) {
         return itemService.getAll(pattern, true).stream().map(ItemDto::toItemDto).collect(Collectors.toList());
     }
 
     @GetMapping
-    private List<ItemDto> getAll(@RequestHeader(value = "X-Sharer-User-Id") int userId) {
+    public List<ItemDto> getAll(@RequestHeader(value = "X-Sharer-User-Id") int userId) {
         Collection<Item> all = itemService.getAll(userId);
 
         return all.stream().sorted(Comparator.comparingInt(Item::getId)).map(item -> {
 
+            //todo Как Вы считаете , уместна ли здесь данная логика (логика по поиску  предыдущего и следующего букинга) ?
             Set<Booking> bookings = item.getBookings();
 
             LocalDateTime now = LocalDateTime.now();
@@ -96,7 +97,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{id}")
-    private ItemDto update(@PathVariable("id") int id,
+    public ItemDto update(@PathVariable("id") int id,
                            @RequestHeader(value = "X-Sharer-User-Id") Integer userId,
                            @Validated(NullAllowed.class) @RequestBody ItemDto itemDto,
                            BindingResult result) {
@@ -109,7 +110,7 @@ public class ItemController {
     }
 
     @DeleteMapping("/{id}")
-    private void delete(@PathVariable("id") int id) {
+    public void delete(@PathVariable("id") int id) {
         itemService.delete(id);
     }
 

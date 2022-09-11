@@ -15,5 +15,9 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
     @Query("select i from Item i where i.owner.id = :ownerId")
     List<Item> getItemByOwner(@Param("ownerId") int ownerId);
 
-    List<Item> findByNameContainingIgnoreCaseAndAvailableTrueOrDescriptionContainingIgnoreCaseAndAvailableTrue(String name, String description);
+    @Query("select i from Item i where " +
+            "i.available = true and ( " +
+            "lower(i.name) LIKE LOWER('%' || :pattern || '%') or " +
+            "lower(i.description) LIKE LOWER('%' || :pattern || '%'))")
+    List<Item> findAvailableItemsByNameOrDescription(String pattern);
 }

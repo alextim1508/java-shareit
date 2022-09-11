@@ -51,8 +51,7 @@ public class ItemServiceImpl implements ItemService {
         if (pattern == null || pattern.isBlank() || pattern.isEmpty())
             return Collections.emptyList();
 
-        String lowerCasePattern = pattern.toLowerCase();
-        return itemRepo.findByNameContainingIgnoreCaseAndAvailableTrueOrDescriptionContainingIgnoreCaseAndAvailableTrue(lowerCasePattern, lowerCasePattern);
+        return itemRepo.findAvailableItemsByNameOrDescription(pattern);
     }
 
     @Transactional

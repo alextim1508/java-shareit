@@ -25,10 +25,10 @@ import static ru.practicum.shareit.booking.controller.BookingDto.toBookingDto;
 @Slf4j
 public class BookingController {
 
-    private final BookingService bookingService;
+    public final BookingService bookingService;
 
     @PostMapping
-    private BookingDto create(@RequestHeader(value = "X-Sharer-User-Id") int userId,
+    public BookingDto create(@RequestHeader(value = "X-Sharer-User-Id") int userId,
                               @Valid @RequestBody BookingDto bookingDto,
                               BindingResult result) {
         if (result.getErrorCount() != 0) {
@@ -43,7 +43,7 @@ public class BookingController {
 
 
     @PatchMapping("/{bookingId}")
-    private BookingDto setApproved(@PathVariable("bookingId") int id,
+    public BookingDto setApproved(@PathVariable("bookingId") int id,
                                    @RequestParam("approved") boolean isApproved,
                                    @RequestHeader(value = "X-Sharer-User-Id") int ownerId) {
         Booking booking = bookingService.setApproved(id, ownerId, isApproved);
@@ -53,7 +53,7 @@ public class BookingController {
 
 
     @GetMapping("/{id}")
-    private BookingDto getById(@PathVariable("id") int id,
+    public BookingDto getById(@PathVariable("id") int id,
                                @RequestHeader(value = "X-Sharer-User-Id") int ownerId) {
         Booking byId = bookingService.getById(id, ownerId);
 
@@ -61,7 +61,7 @@ public class BookingController {
     }
 
     @GetMapping
-    private List<BookingDto> getAllByBooker(@RequestParam(value = "state", required = false, defaultValue = "ALL") String state,
+    public List<BookingDto> getAllByBooker(@RequestParam(value = "state", required = false, defaultValue = "ALL") String state,
                                             @RequestHeader(value = "X-Sharer-User-Id") int userId) {
         Collection<Booking> bookings;
 
@@ -73,7 +73,7 @@ public class BookingController {
                 bookings = bookingService.getCurrentBookingByBooker(userId);
                 break;
             case "PAST":
-                bookings = bookingService.getBookingByBookerAndStatus(userId);
+                bookings = bookingService.getPastBookingByBooker(userId);
                 break;
             case "FUTURE":
                 bookings = bookingService.getFutureBookingByBooker(userId);
@@ -94,7 +94,7 @@ public class BookingController {
     }
 
     @GetMapping("/owner")
-    private List<BookingDto> getAllByOwner(@RequestParam(value = "state", required = false, defaultValue = "ALL") String state,
+    public List<BookingDto> getAllByOwner(@RequestParam(value = "state", required = false, defaultValue = "ALL") String state,
                                            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
         Collection<Booking> bookings;
 
@@ -106,7 +106,7 @@ public class BookingController {
                 bookings = bookingService.getCurrentBookingByOwner(userId);
                 break;
             case "PAST":
-                bookings = bookingService.getBookingByOwnerAndStatus(userId);
+                bookings = bookingService.getPastBookingByOwner(userId);
                 break;
             case "FUTURE":
                 bookings = bookingService.getFutureBookingByOwner(userId);
@@ -128,7 +128,7 @@ public class BookingController {
     }
 
     @DeleteMapping("/{id}")
-    private void delete(@PathVariable("id") int id) {
+    public void delete(@PathVariable("id") int id) {
         bookingService.delete(id);
     }
 }

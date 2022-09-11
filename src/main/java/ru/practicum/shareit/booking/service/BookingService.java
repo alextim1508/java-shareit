@@ -14,7 +14,7 @@ public interface BookingService {
 
     Collection<Booking> getAllByBooker(int userId);
 
-    Collection<Booking> getBookingByOwnerAndStatus(int userId);
+    Collection<Booking> getPastBookingByOwner(int userId);
 
     Collection<Booking> getFutureBookingByOwner(int userId);
 
@@ -28,7 +28,7 @@ public interface BookingService {
 
     Collection<Booking> getAllByOwner(int ownerId);
 
-    Collection<Booking> getBookingByBookerAndStatus(int userId);
+    Collection<Booking> getPastBookingByBooker(int userId);
 
     Collection<Booking> getFutureBookingByBooker(int userId);
 
