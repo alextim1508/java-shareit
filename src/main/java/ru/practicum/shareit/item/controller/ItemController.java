@@ -33,7 +33,7 @@ import static ru.practicum.shareit.item.controller.ItemDto.toItemDto;
 @Slf4j
 public class ItemController {
 
-    public final ItemService itemService;
+    private final ItemService itemService;
 
     @PostMapping
     public ItemDto create(@RequestHeader(value = "X-Sharer-User-Id") int ownerId,

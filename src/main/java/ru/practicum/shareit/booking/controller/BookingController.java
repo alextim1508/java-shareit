@@ -25,7 +25,7 @@ import static ru.practicum.shareit.booking.controller.BookingDto.toBookingDto;
 @Slf4j
 public class BookingController {
 
-    public final BookingService bookingService;
+    private final BookingService bookingService;
 
     @PostMapping
     public BookingDto create(@RequestHeader(value = "X-Sharer-User-Id") int userId,

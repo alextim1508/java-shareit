@@ -23,7 +23,7 @@ import static ru.practicum.shareit.user.controller.UserDto.toUserDto;
 @Slf4j
 public class UserController {
 
-    public final UserService userService;
+    private final UserService userService;
 
     @PostMapping
     public UserDto create(@Valid @RequestBody UserDto userDto,
