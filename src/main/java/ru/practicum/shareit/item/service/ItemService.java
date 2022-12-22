@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.service;
 
 import ru.practicum.shareit.item.controller.ItemDto;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.Collection;
@@ -18,4 +19,6 @@ public interface ItemService {
     Item update(int id, ItemDto itemDto, int userId);
 
     void delete(int id);
+
+    Comment create(Comment comment);
 }

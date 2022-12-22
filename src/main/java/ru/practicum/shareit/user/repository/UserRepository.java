@@ -1,16 +1,13 @@
 package ru.practicum.shareit.user.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.Collection;
 
-public interface UserRepository {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
-    User save(User user);
-
-    User findById(int id);
-
-    Collection<User> findAll();
-
-    void remove(int id);
+    @Query("select count(u)>0 from User u where u.id = :id")
+    boolean existsById(@Param("id") int id);
 }
