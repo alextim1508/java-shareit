@@ -1,40 +1,38 @@
 package ru.practicum.shareit.booking.service;
 
-import ru.practicum.shareit.booking.controller.BookingDto;
-import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.dto.BookingDtoIn;
+import ru.practicum.shareit.booking.dto.BookingDtoOutAbs;
 import ru.practicum.shareit.booking.model.BookingStatus;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface BookingService {
 
-    Booking create(Booking booking);
+    BookingDtoOutAbs create(BookingDtoIn bookingDtoIn, int userId);
 
-    Booking getById(int id, int userId);
+    BookingDtoOutAbs getById(int id, int userId);
 
-    Collection<Booking> getAllByBooker(int userId);
+    List<? extends BookingDtoOutAbs> getAllByBooker(int userId, int from, int size);
 
-    Collection<Booking> getPastBookingByOwner(int userId);
+    List<? extends BookingDtoOutAbs> getBookingByOwnerAndStatus(int userId, BookingStatus status, int from, int size);
 
-    Collection<Booking> getFutureBookingByOwner(int userId);
+    List<? extends BookingDtoOutAbs> getPastBookingByOwner(int userId, int from, int size);
 
-    Collection<Booking> getBookingByOwnerAndStatus(int userId, BookingStatus status);
+    List<? extends BookingDtoOutAbs> getCurrentBookingByOwner(int userId, int from, int size);
 
-    Collection<Booking> getCurrentBookingByOwner(int userId);
+    List<? extends BookingDtoOutAbs> getFutureBookingByOwner(int userId, int from, int size);
 
-    Booking update(int id, BookingDto booking);
+    List<? extends BookingDtoOutAbs> getAllByOwner(int ownerId, int from, int size);
 
-    Booking setApproved(int id, int ownerId, boolean approved);
+    List<? extends BookingDtoOutAbs> getBookingByBookerAndStatus(int userId, BookingStatus status, int from, int size);
 
-    Collection<Booking> getAllByOwner(int ownerId);
+    List<? extends BookingDtoOutAbs> getPastBookingByBooker(int userId, int from, int size);
 
-    Collection<Booking> getPastBookingByBooker(int userId);
+    List<? extends BookingDtoOutAbs> getCurrentBookingByBooker(int userId, int from, int size);
 
-    Collection<Booking> getFutureBookingByBooker(int userId);
+    List<? extends BookingDtoOutAbs> getFutureBookingByBooker(int userId, int from, int size);
 
-    Collection<Booking> getBookingByBookerAndStatus(int userId, BookingStatus status);
-
-    Collection<Booking> getCurrentBookingByBooker(int userId);
+    BookingDtoOutAbs approve(int id, int ownerId, boolean approved);
 
     void delete(int id);
 }

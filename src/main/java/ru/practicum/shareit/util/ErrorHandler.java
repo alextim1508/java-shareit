@@ -3,6 +3,7 @@ package ru.practicum.shareit.util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,16 +12,38 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.util.exception.*;
 
 import javax.validation.ValidationException;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
 
+    @ExceptionHandler(ConflictException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public String handleConflictException(ConflictException e) {
+        log.error("{} : {}", e.getClass().getSimpleName(), e.getMessage());
+        return "Conflict";
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleNotFoundException(NotFoundException e) {
+        log.error("{} : {}", e.getClass().getSimpleName(), e.getMessage());
+        return "Not found";
+    }
+
+
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleValidationException(ValidationException e) {
+        log.error("{} : {}", e.getClass().getSimpleName(), e.getMessage());
+        return "Validation error";
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error("{} : {}", e.getClass().getSimpleName(), e.getMessage());
         return "Validation error";
     }
@@ -46,24 +69,11 @@ public class ErrorHandler {
         return "Illegal database state";
     }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleResourceNotFoundException(Exception e) {
-        log.error("{} : {}", e.getClass().getSimpleName(), e.getMessage());
-        return "ResourceNotFound";
-    }
-
     @ExceptionHandler(ForbiddenException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleForbiddenException(Exception e) {
         log.error("{}", e.getClass().getSimpleName());
         return "ForbiddenException";
-    }
-
-    @ExceptionHandler(ActionIsNotAvailableException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleActionIsNotAvailableException(Exception e) {
-        return "handleActionIsNotAvailableException";
     }
 
     @ExceptionHandler(ItemIsNotAvailableException.class)
@@ -72,12 +82,16 @@ public class ErrorHandler {
         return "ItemIsNotAvailableException";
     }
 
+    @ExceptionHandler(ActionIsNotAvailableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleActionIsNotAvailableException(Exception e) {
+        return "handleActionIsNotAvailableException";
+    }
+
     @ExceptionHandler(UnsupportedStatusException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleUnsupportedStatusException(UnsupportedStatusException e) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("error", "Unknown state: " + e.unknownStatus);
-        return map;
+        return Collections.singletonMap("error", "Unknown state: " + e.unknownStatus);
     }
 
     @ExceptionHandler(StatusChangeException.class)

@@ -12,8 +12,8 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 
-    @Query("select i from Item i where i.owner.id = :ownerId")
-    List<Item> getItemByOwner(@Param("ownerId") int ownerId);
+    @Query("select i from Item i where i.owner.id = :ownerId order by i.id")
+    List<Item> findByOwner(@Param("ownerId") int ownerId);
 
     @Query("select i from Item i where " +
             "i.available = true and ( " +
