@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(int id) {
-        if(!repo.existsById(id)) {
+        if (!repo.existsById(id)) {
             throw new NotFoundException("User with ID " + id + " is not found");
         }
 
