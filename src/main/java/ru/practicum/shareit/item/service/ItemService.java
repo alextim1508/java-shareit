@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.service;
 
+
 import ru.practicum.shareit.item.dto.CommentDtoIn;
 import ru.practicum.shareit.item.dto.CommentDtoOutAbs;
 import ru.practicum.shareit.item.dto.ItemDtoIn;
@@ -22,4 +23,5 @@ public interface ItemService {
     ItemDtoOutAbs update(int id, ItemDtoIn itemDto, int userId);
 
     void delete(int id);
+
 }

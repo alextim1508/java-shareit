@@ -191,8 +191,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void delete(int id) {
-        if(!bookingRepository.existsById(id))
+        if(!bookingRepository.existsById(id)) {
             throw new NotFoundException("Booking with ID " + id + " is not found");
+        }
 
         bookingRepository.deleteById(id);
 
