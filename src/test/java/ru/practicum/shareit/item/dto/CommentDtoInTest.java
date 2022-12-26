@@ -23,4 +23,35 @@ public class CommentDtoInTest extends ItemBaseTest {
         JsonContent<CommentDtoIn> result = jacksonTester.write(commentDtoIn);
         assertThat(result).extractingJsonPathStringValue("$.text").isEqualTo(commentDtoIn.getText());
     }
+
+    @Test
+    void equalsAndHashCodeTest() {
+        CommentDtoIn x = new CommentDtoIn(comment.getText());
+
+        CommentDtoIn y = new CommentDtoIn(comment.getText());
+
+        assertThat(x.equals(y) && y.equals(x)).isTrue();
+        assertThat(x.hashCode() == y.hashCode()).isTrue();
+    }
+
+    @Test
+    void equalsTest() {
+        CommentDtoIn x = new CommentDtoIn(comment.getText());
+
+        assertThat(x.equals(x)).isTrue();
+        assertThat(x.equals(null)).isFalse();
+        assertThat(x.equals(new Object())).isFalse();
+    }
+
+    @Test
+    void noArgsConstructorTest() {
+        CommentDtoIn commentDto = new CommentDtoIn();
+        commentDto.setText(comment.getText());
+        assertThat(commentDto.getText()).isEqualTo(comment.getText());
+    }
+
+    @Test
+    void toStringTest() {
+        assertThat(commentDtoIn.toString()).startsWith(commentDtoIn.getClass().getSimpleName());
+    }
 }

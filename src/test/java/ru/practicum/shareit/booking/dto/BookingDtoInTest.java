@@ -28,4 +28,47 @@ public class BookingDtoInTest extends BookingBaseTest {
         assertThat(result).extractingJsonPathStringValue("$.end").isEqualTo(bookingDtoIn.getEndDate()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
     }
+
+    @Test
+    void equalsAndHashCodeTest() {
+        BookingDtoIn x = BookingDtoIn.builder()
+                .itemId(booking.getItem().getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .build();
+
+        BookingDtoIn y = BookingDtoIn.builder()
+                .itemId(booking.getItem().getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .build();
+
+
+        assertThat(x.equals(y) && y.equals(x)).isTrue();
+        assertThat(x.hashCode() == y.hashCode()).isTrue();
+    }
+
+    @Test
+    void equalsTest() {
+        assertThat(item.equals(item)).isTrue();
+        assertThat(item.equals(null)).isFalse();
+        assertThat(item.equals(new Object())).isFalse();
+    }
+
+    @Test
+    void noArgsConstructorTest() {
+        BookingDtoIn bookingDto = new BookingDtoIn();
+        bookingDto.setItemId(booking.getId());
+        bookingDto.setStartDate(booking.getStartDate());
+        bookingDto.setEndDate(booking.getEndDate());
+
+        assertThat(bookingDto.getItemId()).isEqualTo(booking.getItem().getId());
+        assertThat(bookingDto.getStartDate()).isEqualTo(booking.getStartDate());
+        assertThat(bookingDto.getEndDate()).isEqualTo(booking.getEndDate());
+    }
+
+    @Test
+    void toStringTest() {
+        assertThat(bookingDtoIn.toString()).startsWith(bookingDtoIn.getClass().getSimpleName());
+    }
 }

@@ -23,4 +23,34 @@ public class ItemRequestDtoInTest extends ItemRequestBaseTest {
         JsonContent<ItemRequestDtoIn> result = jacksonTester.write(itemRequestDtoIn);
         assertThat(result).extractingJsonPathStringValue("$.description").isEqualTo(itemRequestDtoIn.getDescription());
     }
+
+    @Test
+    void equalsAndHashCodeTest() {
+        ItemRequestDtoIn x = new ItemRequestDtoIn(itemRequest.getDescription());
+
+        ItemRequestDtoIn y = new ItemRequestDtoIn(itemRequest.getDescription());
+
+        assertThat(x.equals(y) && y.equals(x)).isTrue();
+        assertThat(x.hashCode() == y.hashCode()).isTrue();
+    }
+
+    @Test
+    void equalsTest() {
+        assertThat(itemRequestDtoIn.equals(itemRequestDtoIn)).isTrue();
+        assertThat(itemRequestDtoIn.equals(null)).isFalse();
+        assertThat(itemRequestDtoIn.equals(new Object())).isFalse();
+    }
+
+    @Test
+    void noArgsConstructorTest() {
+        ItemRequestDtoIn itemRequestDto = new ItemRequestDtoIn();
+        itemRequestDto.setDescription(itemRequest.getDescription());
+
+        assertThat(itemRequestDto.getDescription()).isEqualTo(itemRequest.getDescription());
+    }
+
+    @Test
+    void toStringTest() {
+        assertThat(itemRequestDtoIn.toString()).startsWith(itemRequestDtoIn.getClass().getSimpleName());
+    }
 }

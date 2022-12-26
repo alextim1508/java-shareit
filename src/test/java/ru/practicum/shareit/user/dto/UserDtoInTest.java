@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.dto;
 
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
@@ -22,5 +23,43 @@ public class UserDtoInTest extends UserDtoOutTest {
         JsonContent<UserDtoIn> result = jacksonTester.write(userDtoIn);
         assertThat(result).extractingJsonPathStringValue("$.name").isEqualTo(userDtoIn.getName());
         assertThat(result).extractingJsonPathStringValue("$.email").isEqualTo(userDtoIn.getEmail());
+    }
+
+    @Test
+    void equalsAndHashCodeTest() {
+        UserDtoIn x = UserDtoIn.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
+
+        UserDtoIn y = UserDtoIn.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
+
+        assertThat(x.equals(y) && y.equals(x)).isTrue();
+        assertThat(x.hashCode() == y.hashCode()).isTrue();
+    }
+
+    @Test
+    void equalsTest() {
+        assertThat(userDtoIn.equals(userDtoIn)).isTrue();
+        assertThat(userDtoIn.equals(null)).isFalse();
+        assertThat(userDtoIn.equals(new Object())).isFalse();
+    }
+
+    @Test
+    void noArgsConstructorTest() {
+        UserDtoIn userDto = new UserDtoIn();
+        userDto.setName(user.getName());
+        userDto.setEmail(user.getEmail());
+
+        assertThat(userDto.getName()).isEqualTo(user.getName());
+        assertThat(userDto.getName()).isEqualTo(user.getName());
+    }
+
+    @Test
+    void toStringTest() {
+        assertThat(userDtoIn.toString()).startsWith(userDtoIn.getClass().getSimpleName());
     }
 }

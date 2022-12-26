@@ -26,4 +26,49 @@ public class ItemDtoInTest extends ItemBaseTest {
         assertThat(result).extractingJsonPathNumberValue("$.requestId").isEqualTo(itemDtoIn.getRequestId());
     }
 
+    @Test
+    void equalsAndHashCodeTest() {
+        ItemDtoIn x = ItemDtoIn.builder()
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
+
+        ItemDtoIn y = ItemDtoIn.builder()
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
+
+        assertThat(x.equals(y) && y.equals(x)).isTrue();
+        assertThat(x.hashCode() == y.hashCode()).isTrue();
+    }
+
+    @Test
+    void equalsTest() {
+        assertThat(item.equals(item)).isTrue();
+        assertThat(item.equals(null)).isFalse();
+        assertThat(item.equals(new Object())).isFalse();
+    }
+
+    @Test
+    void noArgsConstructorTest() {
+        ItemDtoIn itemDtoOut = new ItemDtoIn();
+        itemDtoOut.setName(item.getName());
+        itemDtoOut.setDescription(item.getDescription());
+        itemDtoOut.setAvailable(item.getAvailable());
+        itemDtoOut.setRequestId(item.getRequest().getId());
+
+        assertThat(itemDtoOut.getName()).isEqualTo(item.getName());
+        assertThat(itemDtoOut.getDescription()).isEqualTo(item.getDescription());
+        assertThat(itemDtoOut.getAvailable()).isEqualTo(item.getAvailable());
+        assertThat(itemDtoOut.getRequestId()).isEqualTo(item.getRequest().getId());
+    }
+
+    @Test
+    void toStringTest() {
+        assertThat(itemDtoIn.toString()).startsWith(itemDtoIn.getClass().getSimpleName());
+    }
 }

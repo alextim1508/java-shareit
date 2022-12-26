@@ -15,7 +15,6 @@ import java.util.Objects;
 @ToString
 @Builder
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class Booking {
 

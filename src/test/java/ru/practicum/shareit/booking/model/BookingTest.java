@@ -4,7 +4,6 @@ package ru.practicum.shareit.booking.model;
 import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.booking.BookingBaseTest;
 
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.practicum.shareit.booking.model.BookingStatus.*;
@@ -12,17 +11,19 @@ import static ru.practicum.shareit.booking.model.BookingStatus.*;
 public class BookingTest extends BookingBaseTest {
 
     @Test
-    void equalsTest() {
+    void equalsAndHashCodeTest() {
         Booking x = Booking.builder()
-                .startDate(now.minusDays(2))
-                .endDate(now.minusDays(1))
+                .id(booking.getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
                 .item(item)
                 .booker(booker)
                 .build();
 
         Booking y = Booking.builder()
-                .startDate(now.minusDays(2))
-                .endDate(now.minusDays(1))
+                .id(booking.getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
                 .item(item)
                 .booker(booker)
                 .build();
@@ -32,47 +33,32 @@ public class BookingTest extends BookingBaseTest {
     }
 
     @Test
-    void requiredArgsConstructorTest() {
-        LocalDateTime start = now.minusDays(2);
-        LocalDateTime end = now.minusDays(1);
-
-        Booking booking = new Booking(start, end, item, booker);
-
-        assertThat(booking.getStartDate()).isEqualTo(start);
-        assertThat(booking.getEndDate()).isEqualTo(end);
-        assertThat(booking.getItem()).isEqualTo(item);
-        assertThat(booking.getBooker()).isEqualTo(booker);
+    void equalsTest() {
+        assertThat(booking.equals(booking)).isTrue();
+        assertThat(booking.equals(null)).isFalse();
+        assertThat(booking.equals(new Object())).isFalse();
     }
 
     @Test
     void noArgsConstructorTest() {
-        LocalDateTime start = now.minusDays(2);
-        LocalDateTime end = now.minusDays(1);
-        BookingStatus status = APPROVED;
-
         Booking booking = new Booking();
-        booking.setStartDate(start);
-        booking.setEndDate(end);
+        booking.setId(this.booking.getId());
+        booking.setStartDate(this.booking.getStartDate());
+        booking.setEndDate(this.booking.getEndDate());
         booking.setItem(item);
         booking.setBooker(booker);
-        booking.setStatus(status);
+        booking.setStatus(this.booking.getStatus());
 
-        assertThat(booking.getStartDate()).isEqualTo(start);
-        assertThat(booking.getEndDate()).isEqualTo(end);
+        assertThat(booking.getId()).isEqualTo(this.booking.getId());
+        assertThat(booking.getStartDate()).isEqualTo(this.booking.getStartDate());
+        assertThat(booking.getEndDate()).isEqualTo(this.booking.getEndDate());
         assertThat(booking.getItem()).isEqualTo(item);
         assertThat(booking.getBooker()).isEqualTo(booker);
-        assertThat(booking.getStatus()).isEqualTo(status);
+        assertThat(booking.getStatus()).isEqualTo(this.booking.getStatus());
     }
 
     @Test
     void toStringTest() {
-        Booking booking = Booking.builder()
-                .startDate(now.minusDays(2))
-                .endDate(now.minusDays(1))
-                .item(item)
-                .booker(booker)
-                .build();
-
         assertThat(booking.toString()).startsWith(booking.getClass().getSimpleName());
     }
 

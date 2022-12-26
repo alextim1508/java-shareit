@@ -35,6 +35,59 @@ public class BookingDtoOutTest extends BookingBaseTest {
         assertThat(result).extractingJsonPathStringValue("$.item.description").isEqualTo(bookingDtoOut.getItem().getDescription());
         assertThat(result).extractingJsonPathBooleanValue("$.item.available").isEqualTo(bookingDtoOut.getItem().getAvailable());
         assertThat(result).extractingJsonPathNumberValue("$.item.requestId").isEqualTo(bookingDtoOut.getItem().getRequestId());
+    }
 
+    @Test
+    void equalsAndHashCodeTest() {
+        BookingDtoOut x = BookingDtoOut.builder()
+                .id(booking.getId())
+                .item(itemDtoOut)
+                .booker(bookerDtoOut)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .status(booking.getStatus())
+                .build();
+
+        BookingDtoOut y = BookingDtoOut.builder()
+                .id(booking.getId())
+                .item(itemDtoOut)
+                .booker(bookerDtoOut)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .status(booking.getStatus())
+                .build();
+
+        assertThat(x.equals(y) && y.equals(x)).isTrue();
+        assertThat(x.hashCode() == y.hashCode()).isTrue();
+    }
+
+    @Test
+    void equalsTest() {
+        assertThat(bookingDtoOut.equals(bookingDtoOut)).isTrue();
+        assertThat(bookingDtoOut.equals(null)).isFalse();
+        assertThat(bookingDtoOut.equals(new Object())).isFalse();
+    }
+
+    @Test
+    void noArgsConstructorTest() {
+        BookingDtoOut bookingDto = new BookingDtoOut();
+        bookingDto.setId(booking.getId());
+        bookingDto.setStartDate(booking.getStartDate());
+        bookingDto.setEndDate(booking.getEndDate());
+        bookingDto.setItem(itemDtoOut);
+        bookingDto.setBooker(bookerDtoOut);
+        bookingDto.setStatus(booking.getStatus());
+
+        assertThat(bookingDto.getId()).isEqualTo(booking.getId());
+        assertThat(bookingDto.getStartDate()).isEqualTo(booking.getStartDate());
+        assertThat(bookingDto.getEndDate()).isEqualTo(booking.getEndDate());
+        assertThat(bookingDto.getItem()).isEqualTo(itemDtoOut);
+        assertThat(bookingDto.getBooker()).isEqualTo(bookerDtoOut);
+        assertThat(bookingDto.getStatus()).isEqualTo(booking.getStatus());
+    }
+
+    @Test
+    void toStringTest() {
+        assertThat(bookingDtoOut.toString()).startsWith(bookingDtoOut.getClass().getSimpleName());
     }
 }
