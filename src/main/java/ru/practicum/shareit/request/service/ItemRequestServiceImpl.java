@@ -43,7 +43,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         userService.existenceCheck(userId);
 
         ItemRequest itemRequest = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException(""));
+                .orElseThrow(() -> new NotFoundException("ItemRequest with ID " + id + " doesn't exist"));
 
         int forLoading = itemRequest.getItems().size();
 
