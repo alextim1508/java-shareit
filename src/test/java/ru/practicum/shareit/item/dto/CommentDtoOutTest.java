@@ -77,6 +77,20 @@ public class CommentDtoOutTest extends ItemBaseTest {
     }
 
     @Test
+    void allArgsConstructorTest() {
+        CommentDtoOut commentDto = new CommentDtoOut(
+                comment.getId(),
+                comment.getText(),
+                comment.getAuthor().getName(),
+                comment.getCreated());
+
+        assertThat(commentDto.getId()).isEqualTo(comment.getId());
+        assertThat(commentDto.getText()).isEqualTo(comment.getText());
+        assertThat(commentDto.getAuthorName()).isEqualTo(comment.getAuthor().getName());
+        assertThat(commentDto.getCreated()).isEqualTo(comment.getCreated());
+    }
+
+    @Test
     void toStringTest() {
         assertThat(commentDtoOut.toString()).startsWith(commentDtoOut.getClass().getSimpleName());
     }

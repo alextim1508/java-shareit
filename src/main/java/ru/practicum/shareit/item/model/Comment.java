@@ -32,6 +32,7 @@ public class Comment {
     @ManyToOne
     private User author;
 
+    @Setter(AccessLevel.NONE)
     private LocalDateTime created;
 
     @PrePersist

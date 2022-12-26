@@ -72,6 +72,20 @@ public class ShortBookingDtoTest extends BookingBaseTest {
     }
 
     @Test
+    void allArgsConstructorTest() {
+        ShortBookingDtoOut bookingDto = new ShortBookingDtoOut(
+                booking.getId(),
+                booking.getBooker().getId(),
+                booking.getStartDate(),
+                booking.getEndDate());
+
+        assertThat(bookingDto.getId()).isEqualTo(booking.getId());
+        assertThat(bookingDto.getBookerId()).isEqualTo(booker.getId());
+        assertThat(bookingDto.getStartDate()).isEqualTo(booking.getStartDate());
+        assertThat(bookingDto.getEndDate()).isEqualTo(booking.getEndDate());
+    }
+
+    @Test
     void toStringTest() {
         assertThat(shortBookingDtoOut.toString()).startsWith(shortBookingDtoOut.getClass().getSimpleName());
     }

@@ -28,6 +28,7 @@ public class ItemRequest {
     @NonNull
     private String description;
 
+    @Setter(AccessLevel.NONE)
     private LocalDateTime created;
 
     @NonNull

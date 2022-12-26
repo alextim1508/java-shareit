@@ -52,6 +52,15 @@ public class UserDtoOutTest extends UserBaseTest {
     }
 
     @Test
+    void allArgsConstructorTest() {
+        UserDtoOut userDto = new UserDtoOut(user.getId(), user.getName(), user.getEmail());
+
+        assertThat(userDto.getId()).isEqualTo(user.getId());
+        assertThat(userDto.getName()).isEqualTo(user.getName());
+        assertThat(userDto.getName()).isEqualTo(user.getName());
+    }
+
+    @Test
     void noArgsConstructorTest() {
         UserDtoOut userDto = new UserDtoOut();
         userDto.setId(user.getId());

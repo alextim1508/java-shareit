@@ -58,6 +58,24 @@ public class BookingTest extends BookingBaseTest {
     }
 
     @Test
+    void allArgsConstructorTest() {
+        Booking booking = new Booking(
+                this.booking.getId(),
+                this.booking.getStartDate(),
+                this.booking.getEndDate(),
+                item,
+                booker,
+                this.booking.getStatus());
+
+        assertThat(booking.getId()).isEqualTo(this.booking.getId());
+        assertThat(booking.getStartDate()).isEqualTo(this.booking.getStartDate());
+        assertThat(booking.getEndDate()).isEqualTo(this.booking.getEndDate());
+        assertThat(booking.getItem()).isEqualTo(item);
+        assertThat(booking.getBooker()).isEqualTo(booker);
+        assertThat(booking.getStatus()).isEqualTo(this.booking.getStatus());
+    }
+
+    @Test
     void toStringTest() {
         assertThat(booking.toString()).startsWith(booking.getClass().getSimpleName());
     }

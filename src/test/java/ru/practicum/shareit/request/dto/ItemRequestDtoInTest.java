@@ -50,6 +50,12 @@ public class ItemRequestDtoInTest extends ItemRequestBaseTest {
     }
 
     @Test
+    void allArgsConstructorTest() {
+        ItemRequestDtoIn itemRequestDto = new ItemRequestDtoIn(itemRequest.getDescription());
+        assertThat(itemRequestDto.getDescription()).isEqualTo(itemRequest.getDescription());
+    }
+
+    @Test
     void toStringTest() {
         assertThat(itemRequestDtoIn.toString()).startsWith(itemRequestDtoIn.getClass().getSimpleName());
     }

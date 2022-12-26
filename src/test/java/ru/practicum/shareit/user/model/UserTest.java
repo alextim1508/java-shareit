@@ -7,7 +7,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserTest extends UserBaseTest {
 
-
     @Test
     void testEquals() {
         User x = User.builder()
@@ -44,6 +43,16 @@ public class UserTest extends UserBaseTest {
         assertThat(user.getName()).isEqualTo(this.user.getName());
         assertThat(user.getEmail()).isEqualTo(this.user.getEmail());
     }
+
+    @Test
+    void testAllArgsConstructorAndGettersSetters() {
+        User user = new User(this.user.getId(), this.user.getName(), this.user.getEmail());
+
+        assertThat(user.getId()).isEqualTo(this.user.getId());
+        assertThat(user.getName()).isEqualTo(this.user.getName());
+        assertThat(user.getEmail()).isEqualTo(this.user.getEmail());
+    }
+
 
     @Test
     void testBuilderAndToString() {

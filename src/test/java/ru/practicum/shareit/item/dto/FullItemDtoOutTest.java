@@ -125,6 +125,29 @@ public class FullItemDtoOutTest extends ItemBaseTest {
     }
 
     @Test
+    void allArgsConstructorTest() {
+        FullItemDtoOut itemDtoOut = new FullItemDtoOut(
+                item.getId(),
+                item.getName(),
+                item.getDescription(),
+                item.getAvailable(),
+                item.getRequest().getId(),
+                shortBookingDtoOut,
+                shortBookingDtoOut,
+                List.of(commentDtoOut));
+
+        assertThat(itemDtoOut.getId()).isEqualTo(item.getId());
+        assertThat(itemDtoOut.getName()).isEqualTo(item.getName());
+        assertThat(itemDtoOut.getDescription()).isEqualTo(item.getDescription());
+        assertThat(itemDtoOut.getAvailable()).isEqualTo(item.getAvailable());
+        assertThat(itemDtoOut.getRequestId()).isEqualTo(item.getRequest().getId());
+        assertThat(itemDtoOut.getNextBooking()).isEqualTo(shortBookingDtoOut);
+        assertThat(itemDtoOut.getLastBooking()).isEqualTo(shortBookingDtoOut);
+        assertThat(itemDtoOut.getComments()).isEqualTo(List.of(commentDtoOut));
+    }
+
+
+    @Test
     void toStringTest() {
         assertThat(fullItemDtoOut.toString()).startsWith(fullItemDtoOut.getClass().getSimpleName());
     }

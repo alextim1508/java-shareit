@@ -59,6 +59,14 @@ public class UserDtoInTest extends UserDtoOutTest {
     }
 
     @Test
+    void allArgsConstructorTest() {
+        UserDtoIn userDto = new UserDtoIn(user.getName(), user.getEmail());
+
+        assertThat(userDto.getName()).isEqualTo(user.getName());
+        assertThat(userDto.getName()).isEqualTo(user.getName());
+    }
+
+    @Test
     void toStringTest() {
         assertThat(userDtoIn.toString()).startsWith(userDtoIn.getClass().getSimpleName());
     }

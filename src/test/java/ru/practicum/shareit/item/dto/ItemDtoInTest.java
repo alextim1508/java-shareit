@@ -68,6 +68,20 @@ public class ItemDtoInTest extends ItemBaseTest {
     }
 
     @Test
+    void allArgsConstructorTest() {
+        ItemDtoIn itemDtoOut = new ItemDtoIn(
+                item.getName(),
+                item.getDescription(),
+                item.getAvailable(),
+                item.getRequest().getId());
+
+        assertThat(itemDtoOut.getName()).isEqualTo(item.getName());
+        assertThat(itemDtoOut.getDescription()).isEqualTo(item.getDescription());
+        assertThat(itemDtoOut.getAvailable()).isEqualTo(item.getAvailable());
+        assertThat(itemDtoOut.getRequestId()).isEqualTo(item.getRequest().getId());
+    }
+
+    @Test
     void toStringTest() {
         assertThat(itemDtoIn.toString()).startsWith(itemDtoIn.getClass().getSimpleName());
     }

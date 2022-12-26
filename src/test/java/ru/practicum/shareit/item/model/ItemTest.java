@@ -62,6 +62,30 @@ class ItemTest extends ItemBaseTest {
     }
 
     @Test
+    void allArgsConstructorTest() {
+        Item item = new Item(this.item.getId(),
+                this.item.getName(),
+                this.item.getDescription(),
+                this.item.getAvailable(),
+                this.item.getOwner(),
+                itemRequest,
+                List.of(booking),
+                List.of(comment),
+                booking,
+                booking);
+
+        assertThat(item.getId()).isEqualTo(this.item.getId());
+        assertThat(item.getName()).isEqualTo(this.item.getName());
+        assertThat(item.getDescription()).isEqualTo(this.item.getDescription());
+        assertThat(item.getAvailable()).isEqualTo(this.item.getAvailable());
+        assertThat(item.getNextBooking()).isEqualTo(booking);
+        assertThat(item.getLastBooking()).isEqualTo(booking);
+        assertThat(item.getBookings()).isEqualTo(List.of(booking));
+        assertThat(item.getComments()).isEqualTo(List.of(comment));
+        assertThat(item.getRequest()).isEqualTo(itemRequest);
+    }
+
+    @Test
     void toStringTest() {
         assertThat(item.toString()).startsWith(item.getClass().getSimpleName());
     }

@@ -41,6 +41,16 @@ public class CommentTest extends ItemBaseTest {
         assertThat(comment.getCreated()).isEqualTo(now);
     }
 
+    @Test
+    void allArgsConstructorTest() {
+        Comment comment = new Comment(this.comment.getId(), this.comment.getText(), item, booker, now);
+
+        assertThat(comment.getId()).isEqualTo(this.comment.getId());
+        assertThat(comment.getText()).isEqualTo(this.comment.getText());
+        assertThat(comment.getItem()).isEqualTo(item);
+        assertThat(comment.getAuthor()).isEqualTo(booker);
+        assertThat(comment.getCreated()).isEqualTo(now);
+    }
 
     @Test
     void toStringTest() {

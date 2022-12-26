@@ -44,22 +44,36 @@ public class ItemRequestTest extends ItemRequestBaseTest {
 
     @Test
     void noArgsConstructorTest() {
-        int id = 1;
-        String description = "description";
-
         ItemRequest itemRequest = new ItemRequest();
-        itemRequest.setId(id);
-        itemRequest.setDescription(description);
+        itemRequest.setId(this.itemRequest.getId());
+        itemRequest.setDescription(this.itemRequest.getDescription());
         itemRequest.setRequestor(requester);
         itemRequest.setItems(List.of(item));
         itemRequest.onCreate();
 
-        assertThat(itemRequest.getId()).isEqualTo(id);
-        assertThat(itemRequest.getDescription()).isEqualTo(description);
+        assertThat(itemRequest.getId()).isEqualTo(this.itemRequest.getId());
+        assertThat(itemRequest.getDescription()).isEqualTo(this.itemRequest.getDescription());
         assertThat(itemRequest.getRequestor()).isEqualTo(requester);
         assertThat(itemRequest.getCreated()).isEqualTo(now);
         assertThat(itemRequest.getItems()).isEqualTo(List.of(item));
     }
+
+    @Test
+    void allArgsConstructorTest() {
+        ItemRequest itemRequest = new ItemRequest(
+                this.itemRequest.getId(),
+                this.itemRequest.getDescription(),
+                this.itemRequest.getCreated(),
+                requester,
+                List.of(item));
+
+        assertThat(itemRequest.getId()).isEqualTo(this.itemRequest.getId());
+        assertThat(itemRequest.getDescription()).isEqualTo(this.itemRequest.getDescription());
+        assertThat(itemRequest.getRequestor()).isEqualTo(requester);
+        assertThat(itemRequest.getCreated()).isEqualTo(this.itemRequest.getCreated());
+        assertThat(itemRequest.getItems()).isEqualTo(List.of(item));
+    }
+
 
     @Test
     void toStringTest() {

@@ -79,6 +79,20 @@ public class ItemRequestDtoOutTest extends ItemRequestBaseTest {
     }
 
     @Test
+    void allArgsConstructorTest() {
+        ItemRequestDtoOut itemRequestDto = new ItemRequestDtoOut(
+                itemRequest.getId(),
+                itemRequest.getDescription(),
+                itemRequest.getCreated(),
+                List.of(itemDtoOut));
+
+        assertThat(itemRequestDto.getId()).isEqualTo(itemRequest.getId());
+        assertThat(itemRequestDto.getDescription()).isEqualTo(itemRequest.getDescription());
+        assertThat(itemRequestDto.getCreated()).isEqualTo(itemRequest.getCreated());
+        assertThat(itemRequestDto.getItems()).isEqualTo(List.of(itemDtoOut));
+    }
+
+    @Test
     void toStringTest() {
         assertThat(itemRequestDtoOut.toString()).startsWith(itemRequestDtoOut.getClass().getSimpleName());
     }

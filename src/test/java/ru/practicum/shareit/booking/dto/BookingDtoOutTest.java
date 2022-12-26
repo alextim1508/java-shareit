@@ -87,6 +87,24 @@ public class BookingDtoOutTest extends BookingBaseTest {
     }
 
     @Test
+    void allArgsConstructorTest() {
+        BookingDtoOut bookingDto = new BookingDtoOut(
+                booking.getId(),
+                booking.getStartDate(),
+                booking.getEndDate(),
+                itemDtoOut,
+                bookerDtoOut,
+                booking.getStatus());
+
+        assertThat(bookingDto.getId()).isEqualTo(booking.getId());
+        assertThat(bookingDto.getStartDate()).isEqualTo(booking.getStartDate());
+        assertThat(bookingDto.getEndDate()).isEqualTo(booking.getEndDate());
+        assertThat(bookingDto.getItem()).isEqualTo(itemDtoOut);
+        assertThat(bookingDto.getBooker()).isEqualTo(bookerDtoOut);
+        assertThat(bookingDto.getStatus()).isEqualTo(booking.getStatus());
+    }
+
+    @Test
     void toStringTest() {
         assertThat(bookingDtoOut.toString()).startsWith(bookingDtoOut.getClass().getSimpleName());
     }

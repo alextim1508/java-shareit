@@ -51,6 +51,12 @@ public class CommentDtoInTest extends ItemBaseTest {
     }
 
     @Test
+    void allArgsConstructorTest() {
+        CommentDtoIn commentDto = new CommentDtoIn(comment.getText());
+        assertThat(commentDto.getText()).isEqualTo(comment.getText());
+    }
+
+    @Test
     void toStringTest() {
         assertThat(commentDtoIn.toString()).startsWith(commentDtoIn.getClass().getSimpleName());
     }
