@@ -264,7 +264,7 @@ public class ItemControllerTest extends ItemBaseTest {
     @Test
     void update_shouldAnswerNotFoundWhenActionIsForbidden() {
         when(itemService.update(anyInt(), any(ItemDtoIn.class), anyInt()))
-                .thenThrow(new ForbiddenException());
+                .thenThrow(new ForbiddenException("User is not owner"));
 
         mvc.perform(patch("/items/1")
                         .header(USER_ID_HEADER, "1")

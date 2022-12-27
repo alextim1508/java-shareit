@@ -45,7 +45,7 @@ public class BookingServiceImpl implements BookingService {
 
         if (!item.getAvailable()) {
             log.warn("{} of {} is not available", item, booking);
-            throw new ItemIsNotAvailableException();
+            throw new ItemIsNotAvailableException("Item with ID" + item.getId() + " is not available");
         }
 
         if (booking.getBooker().getId().equals(item.getOwner().getId())) {
@@ -67,7 +67,7 @@ public class BookingServiceImpl implements BookingService {
         if (booking.getBooker().getId() != userId && booking.getItem().getOwner().getId() != userId) {
             log.warn("Access of user with ID {} to {} is prohibited. " +
                     "Only the booker or the owner can get the book", id, booking);
-            throw new ForbiddenException();
+            throw new ForbiddenException("Forbidden. User is not owner or booker");
         }
 
         log.info("{} is found", booking);
@@ -76,93 +76,154 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<? extends BookingDtoOutAbs> getAllByBooker(int bookerId, int from, int size) {
+    public List<? extends BookingDtoOutAbs> getAllByBooker(int bookerId,
+                                                           int from,
+                                                           int size) {
         userService.existenceCheck(bookerId);
 
         Pageable pageable = new OffsetLimitPageable(from, size, Sort.by(Sort.Direction.DESC, "startDate"));
+
         List<Booking> bookings = bookingRepository.getBookingByBooker(bookerId, pageable);
-        log.info("Found {} booking by the booker with ID {}. From {}, size {}", bookings.size(), bookerId, from, size);
+        log.info("Found {} booking by the booker with ID {}. From {}, size {}",
+                bookings.size(), bookerId, from, size);
+
         return bookingMapper.toDto(bookings);
     }
 
     @Override
-    public List<? extends BookingDtoOutAbs> getBookingByBookerAndStatus(int bookerId, BookingStatus status, int from, int size) {
+    public List<? extends BookingDtoOutAbs> getBookingByBookerAndStatus(int bookerId,
+                                                                        BookingStatus status,
+                                                                        int from,
+                                                                        int size) {
         userService.existenceCheck(bookerId);
+
         Pageable pageable = new OffsetLimitPageable(from, size, Sort.by(Sort.Direction.DESC, "startDate"));
+
         List<Booking> bookings = bookingRepository.getBookingByBookerAndStatus(bookerId, status, pageable);
-        log.info("Found {} booking by the booker with ID {} and {}. From {}, size {}", bookings.size(), bookerId, status, from, size);
+        log.info("Found {} booking by the booker with ID {} and {}. From {}, size {}",
+                bookings.size(), bookerId, status, from, size);
+
         return bookingMapper.toDto(bookings);
     }
 
     @Override
-    public List<? extends BookingDtoOutAbs> getPastBookingByBooker(int bookerId, int from, int size) {
+    public List<? extends BookingDtoOutAbs> getPastBookingByBooker(int bookerId,
+                                                                   int from,
+                                                                   int size) {
         userService.existenceCheck(bookerId);
+
         Pageable pageable = new OffsetLimitPageable(from, size, Sort.by(Sort.Direction.DESC, "startDate"));
+
         List<Booking> bookings = bookingRepository.getPastBookingByBooker(bookerId, pageable);
-        log.info("Found {} booking by the booker with ID {}. From {}, size {}", bookings.size(), bookerId, from, size);
+        log.info("Found {} booking by the booker with ID {}. From {}, size {}",
+                bookings.size(), bookerId, from, size);
+
         return bookingMapper.toDto(bookings);
     }
 
     @Override
-    public List<? extends BookingDtoOutAbs> getCurrentBookingByBooker(int bookerId, int from, int size) {
+    public List<? extends BookingDtoOutAbs> getCurrentBookingByBooker(int bookerId,
+                                                                      int from,
+                                                                      int size) {
         userService.existenceCheck(bookerId);
+
         Pageable pageable = new OffsetLimitPageable(from, size, Sort.by(Sort.Direction.DESC, "startDate"));
+
         List<Booking> bookings = bookingRepository.getCurrentBookingByBooker(bookerId, pageable);
-        log.info("Found {} booking by the booker with ID {}. From {}, size {}", bookings.size(), bookerId, from, size);
+        log.info("Found {} booking by the booker with ID {}. From {}, size {}",
+                bookings.size(), bookerId, from, size);
+
         return bookingMapper.toDto(bookings);
     }
 
     @Override
-    public List<? extends BookingDtoOutAbs> getFutureBookingByBooker(int bookerId, int from, int size) {
+    public List<? extends BookingDtoOutAbs> getFutureBookingByBooker(int bookerId,
+                                                                     int from,
+                                                                     int size) {
         userService.existenceCheck(bookerId);
+
         Pageable pageable = new OffsetLimitPageable(from, size, Sort.by(Sort.Direction.DESC, "startDate"));
+
         List<Booking> bookings = bookingRepository.getFutureBookingByBooker(bookerId, pageable);
-        log.info("Found {} booking by the booker with ID {}. From {}, size {}", bookings.size(), bookerId, from, size);
+        log.info("Found {} booking by the booker with ID {}. From {}, size {}",
+                bookings.size(), bookerId, from, size);
+
         return bookingMapper.toDto(bookings);
     }
 
     @Override
-    public List<? extends BookingDtoOutAbs> getAllByOwner(int ownerId, int from, int size) {
+    public List<? extends BookingDtoOutAbs> getAllByOwner(int ownerId,
+                                                          int from,
+                                                          int size) {
         userService.existenceCheck(ownerId);
+
         Pageable pageable = new OffsetLimitPageable(from, size, Sort.by(Sort.Direction.DESC, "startDate"));
+
         List<Booking> bookings = bookingRepository.getBookingByOwner(ownerId, pageable);
-        log.info("Found {} booking by the owner with ID {}. From {}, size {}", bookings.size(), ownerId, from, size);
+        log.info("Found {} booking by the owner with ID {}. From {}, size {}",
+                bookings.size(), ownerId, from, size);
+
         return bookingMapper.toDto(bookings);
     }
 
     @Override
-    public List<? extends BookingDtoOutAbs> getBookingByOwnerAndStatus(int ownerId, BookingStatus status, int from, int size) {
+    public List<? extends BookingDtoOutAbs> getBookingByOwnerAndStatus(int ownerId,
+                                                                       BookingStatus status,
+                                                                       int from,
+                                                                       int size) {
         userService.existenceCheck(ownerId);
+
         Pageable pageable = new OffsetLimitPageable(from, size, Sort.by(Sort.Direction.DESC, "startDate"));
+
         List<Booking> bookings = bookingRepository.getBookingByOwnerAndStatus(ownerId, status, pageable);
-        log.info("Found {} booking by the owner with ID {} and {}. From {}, size {}", bookings.size(), ownerId, status, from, size);
+        log.info("Found {} booking by the owner with ID {} and {}. From {}, size {}",
+                bookings.size(), ownerId, status, from, size);
+
         return bookingMapper.toDto(bookings);
     }
 
     @Override
-    public List<? extends BookingDtoOutAbs> getPastBookingByOwner(int ownerId, int from, int size) {
+    public List<? extends BookingDtoOutAbs> getPastBookingByOwner(int ownerId,
+                                                                  int from,
+                                                                  int size) {
         userService.existenceCheck(ownerId);
+
         Pageable pageable = new OffsetLimitPageable(from, size, Sort.by(Sort.Direction.DESC, "startDate"));
+
         List<Booking> bookings = bookingRepository.getPastBookingByOwner(ownerId, pageable);
-        log.info("Found {} booking by the owner with ID {}. From {}, size {}", bookings.size(), ownerId, from, size);
+        log.info("Found {} booking by the owner with ID {}. From {}, size {}",
+                bookings.size(), ownerId, from, size);
+
         return bookingMapper.toDto(bookings);
     }
 
     @Override
-    public List<? extends BookingDtoOutAbs> getCurrentBookingByOwner(int ownerId, int from, int size) {
+    public List<? extends BookingDtoOutAbs> getCurrentBookingByOwner(int ownerId,
+                                                                     int from,
+                                                                     int size) {
         userService.existenceCheck(ownerId);
+
         Pageable pageable = new OffsetLimitPageable(from, size, Sort.by(Sort.Direction.DESC, "startDate"));
+
         List<Booking> bookings = bookingRepository.getCurrentBookingByOwner(ownerId, pageable);
-        log.info("Found {} booking by the owner with ID {}. From {}, size {}", bookings.size(), ownerId, from, size);
+        log.info("Found {} booking by the owner with ID {}. From {}, size {}",
+                bookings.size(), ownerId, from, size);
+
         return bookingMapper.toDto(bookings);
     }
 
     @Override
-    public List<? extends BookingDtoOutAbs> getFutureBookingByOwner(int ownerId, int from, int size) {
+    public List<? extends BookingDtoOutAbs> getFutureBookingByOwner(int ownerId,
+                                                                    int from,
+                                                                    int size) {
         userService.existenceCheck(ownerId);
+
         Pageable pageable = new OffsetLimitPageable(from, size, Sort.by(Sort.Direction.DESC, "startDate"));
+
         List<Booking> bookings = bookingRepository.getFutureBookingByOwner(ownerId, pageable);
-        log.info("Found {} booking by the owner with ID {}. From {}, size {}", bookings.size(), ownerId, from, size);
+        log.info("Found {} booking by the owner with ID {}. From {}, size {}",
+                bookings.size(), ownerId, from, size);
+
         return bookingMapper.toDto(bookings);
     }
 
@@ -174,7 +235,7 @@ public class BookingServiceImpl implements BookingService {
 
         if (!booking.getItem().getOwner().getId().equals(ownerId)) {
             log.info("User with ID {} can not change status of {}. Only the owner can do it", ownerId, booking);
-            throw new ForbiddenException();
+            throw new ForbiddenException("Forbidden. ser is not owner");
         }
 
         if (booking.getStatus() != WAITING) {

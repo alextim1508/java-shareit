@@ -150,7 +150,7 @@ public class BookingControllerTest extends BookingBaseTest {
     @Test
     void create_shouldAnswerBadRequestWhenItemIsNotAvailable() {
         when(bookingService.create(any(BookingDtoIn.class), anyInt()))
-                .thenThrow(new ItemIsNotAvailableException());
+                .thenThrow(new ItemIsNotAvailableException("Item is not available"));
 
         mvc.perform(post("/bookings")
                         .header(USER_ID_HEADER, "1")
@@ -232,7 +232,7 @@ public class BookingControllerTest extends BookingBaseTest {
     @Test
     void getById_shouldAnswerNotFoundRequestWhenActionIsForbidden() {
         when(bookingService.getById(anyInt(), anyInt()))
-                .thenThrow(new ForbiddenException());
+                .thenThrow(new ForbiddenException("User is not owner or booker"));
 
         mvc.perform(get("/bookings/1")
                         .header(USER_ID_HEADER, "1")
@@ -882,7 +882,7 @@ public class BookingControllerTest extends BookingBaseTest {
     @Test
     void approve_shouldAnswerNotFoundRequestWhenActionIsForbidden() {
         when(bookingService.approve(anyInt(), anyInt(), anyBoolean()))
-                .thenThrow(new ForbiddenException());
+                .thenThrow(new ForbiddenException("Forbidden. User is not owner"));
 
         mvc.perform(patch("/bookings/1")
                         .header(USER_ID_HEADER, "1")

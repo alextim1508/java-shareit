@@ -15,6 +15,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 import static ru.practicum.shareit.user.controller.UserController.USER_ID_HEADER;
+import static ru.practicum.shareit.util.Util.DEFAULT_PAGE_SIZE;
 
 
 @Slf4j
@@ -25,8 +26,6 @@ import static ru.practicum.shareit.user.controller.UserController.USER_ID_HEADER
 public class ItemRequestController {
 
     private final ItemRequestService itemRequestService;
-
-    private static final String DEFAULT_PAGE_SIZE = "100";
 
     @PostMapping
     public ItemRequestDtoOutAbs create(@RequestHeader(value = USER_ID_HEADER) int userId,
@@ -47,14 +46,16 @@ public class ItemRequestController {
     }
 
     @GetMapping
-    public List<? extends ItemRequestDtoOutAbs> getAllByRequestor(@RequestHeader(value = USER_ID_HEADER) int requestorId) {
+    public List<? extends ItemRequestDtoOutAbs> getAllByRequestor(
+            @RequestHeader(value = USER_ID_HEADER) int requestorId) {
         return itemRequestService.getAllByRequestor(requestorId);
     }
 
     @GetMapping("all")
-    public List<? extends ItemRequestDtoOutAbs> getAll(@Min(0) @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
-                                                       @Min(1) @RequestParam(value = "size", required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
-                                                       @RequestHeader(value = USER_ID_HEADER) int requestorId) {
+    public List<? extends ItemRequestDtoOutAbs> getAll(
+            @Min(0) @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
+            @Min(1) @RequestParam(value = "size", required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
+            @RequestHeader(value = USER_ID_HEADER) int requestorId) {
         return itemRequestService.getAll(requestorId, from, size);
     }
 }

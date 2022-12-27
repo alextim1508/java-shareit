@@ -77,7 +77,8 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         for (ItemRequest itemRequest : itemRequests)
             forLoading = itemRequest.getItems().size();
 
-        log.info("Found {} item requests by the requestor with ID {}. From {}, size {}", itemRequests.size(), userId, from, size);
+        log.info("Found {} item requests by the requestor with ID {}. From {}, size {}",
+                itemRequests.size(), userId, from, size);
 
         return itemRequestMapper.toDto(itemRequests);
     }

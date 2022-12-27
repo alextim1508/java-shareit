@@ -101,6 +101,7 @@ public class ItemServiceImpl implements ItemService {
 
         List<Item> items = itemRepo.findAvailableItemsByNameOrDescription(pattern);
         log.info("Founded {} items by pattern {}", items.size(), pattern);
+
         return itemMapper.toDto(items);
     }
 
@@ -112,11 +113,10 @@ public class ItemServiceImpl implements ItemService {
 
         if (item.getOwner().getId() != userId) {
             log.info("User with ID {} cannot change {}. Only owner can do it", userId, itemDto);
-            throw new ForbiddenException();
+            throw new ForbiddenException("ForbiddenException. User is not owner");
         }
 
         itemMapper.updateItemFromDto(itemDto, item);
-
         log.info("{} is updated", item);
 
         return itemMapper.toDto(item);

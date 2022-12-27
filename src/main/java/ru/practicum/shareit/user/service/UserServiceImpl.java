@@ -32,7 +32,6 @@ public class UserServiceImpl implements UserService {
         } catch (DataIntegrityViolationException e) {
             throw new ConflictException("Email already in use");
         }
-
         log.info("{} is saved", savedUser);
 
         return mapper.toDto(savedUser);
@@ -50,7 +49,6 @@ public class UserServiceImpl implements UserService {
     public UserDtoOut getById(int id) {
         User user = repo.findById(id)
                 .orElseThrow(() -> new NotFoundException("User with ID " + id + " is not found"));
-
         log.info("{} is found", user);
 
         return mapper.toDto(user);
@@ -60,6 +58,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDtoOut> getAll() {
         List<User> users = repo.findAll();
         log.info("{} users are founded", users.size());
+
         return mapper.toDto(users);
     }
 
@@ -75,8 +74,8 @@ public class UserServiceImpl implements UserService {
         } catch (DataIntegrityViolationException e) {
             throw new ConflictException("Email already in use");
         }
-
         log.info("{} is updated", user);
+
         return mapper.toDto(user);
     }
 

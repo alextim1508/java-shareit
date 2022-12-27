@@ -18,6 +18,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 import static ru.practicum.shareit.user.controller.UserController.USER_ID_HEADER;
+import static ru.practicum.shareit.util.Util.DEFAULT_PAGE_SIZE;
 
 
 @RestController
@@ -28,8 +29,6 @@ import static ru.practicum.shareit.user.controller.UserController.USER_ID_HEADER
 public class BookingController {
 
     private final BookingService bookingService;
-
-    private static final String DEFAULT_PAGE_SIZE = "100";
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public BookingDtoOutAbs create(@RequestHeader(value = USER_ID_HEADER) int userId,
@@ -50,10 +49,11 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<? extends BookingDtoOutAbs> getAllByBooker(@RequestParam(value = "state", required = false, defaultValue = "ALL") String state,
-                                                           @RequestHeader(value = USER_ID_HEADER) int userId,
-                                                           @Min(0) @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
-                                                           @Min(1) @RequestParam(value = "size", required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer size) {
+    public List<? extends BookingDtoOutAbs> getAllByBooker(
+            @RequestParam(value = "state", required = false, defaultValue = "ALL") String state,
+            @RequestHeader(value = USER_ID_HEADER) int userId,
+            @Min(0) @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
+            @Min(1) @RequestParam(value = "size", required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer size) {
         switch (state) {
             case "ALL":
                 return bookingService.getAllByBooker(userId, from, size);
@@ -73,10 +73,11 @@ public class BookingController {
     }
 
     @GetMapping("/owner")
-    public List<? extends BookingDtoOutAbs> getAllByOwner(@RequestParam(value = "state", required = false, defaultValue = "ALL") String state,
-                                                          @RequestHeader(value = USER_ID_HEADER) int userId,
-                                                          @Min(0) @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
-                                                          @Min(1) @RequestParam(value = "size", required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer size) {
+    public List<? extends BookingDtoOutAbs> getAllByOwner(
+            @RequestParam(value = "state", required = false, defaultValue = "ALL") String state,
+            @RequestHeader(value = USER_ID_HEADER) int userId,
+            @Min(0) @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
+            @Min(1) @RequestParam(value = "size", required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer size) {
         switch (state) {
             case "ALL":
                 return bookingService.getAllByOwner(userId, from, size);
