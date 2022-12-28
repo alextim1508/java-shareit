@@ -8,7 +8,6 @@ import org.springframework.boot.test.json.JsonContent;
 import ru.practicum.shareit.item.ItemBaseTest;
 
 import java.io.IOException;
-import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 

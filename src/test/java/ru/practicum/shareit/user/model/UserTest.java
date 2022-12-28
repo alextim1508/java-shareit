@@ -1,10 +1,7 @@
 package ru.practicum.shareit.user.model;
 
 import org.junit.jupiter.api.Test;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserBaseTest;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -61,7 +58,7 @@ public class UserTest extends UserBaseTest {
         assertThatThrownBy(() -> {
             new User(this.user.getId(), null, this.user.getEmail());
         }).isInstanceOf(NullPointerException.class)
-          .hasMessage("name is marked non-null but is null");
+                .hasMessage("name is marked non-null but is null");
     }
 
     @Test
@@ -121,7 +118,7 @@ public class UserTest extends UserBaseTest {
         assertThatThrownBy(() -> {
             user.setEmail(null);
         }).isInstanceOf(NullPointerException.class)
-          .hasMessage("email is marked non-null but is null");
+                .hasMessage("email is marked non-null but is null");
     }
 
     @Test

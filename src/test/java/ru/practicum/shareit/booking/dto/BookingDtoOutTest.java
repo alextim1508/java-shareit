@@ -7,8 +7,6 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 import ru.practicum.shareit.booking.BookingBaseTest;
-import ru.practicum.shareit.booking.model.BookingStatus;
-import ru.practicum.shareit.item.dto.ItemDtoIn;
 import ru.practicum.shareit.item.dto.ItemDtoOut;
 import ru.practicum.shareit.user.dto.UserDtoOut;
 
@@ -132,7 +130,7 @@ public class BookingDtoOutTest extends BookingBaseTest {
         BookingDtoOut y = BookingDtoOut.builder()
                 .id(-1)
                 .item(itemDtoOut)
-                .booker( UserDtoOut.builder()
+                .booker(UserDtoOut.builder()
                         .id(-1)
                         .name(booker.getName())
                         .email(booker.getEmail())

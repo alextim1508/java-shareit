@@ -642,8 +642,6 @@ public class BookingControllerTest extends BookingBaseTest {
     }
 
 
-
-
     @SneakyThrows
     @Test
     void getAllByOwner_shouldAnswerOKAndPastBooking() {

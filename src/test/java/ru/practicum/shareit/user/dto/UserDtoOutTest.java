@@ -95,6 +95,7 @@ public class UserDtoOutTest extends UserBaseTest {
 
         AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
     }
+
     @Test
     void equalsTest() {
         assertThat(userDtoOut.equals(userDtoOut)).isTrue();

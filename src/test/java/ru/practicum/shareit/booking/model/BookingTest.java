@@ -3,7 +3,6 @@ package ru.practicum.shareit.booking.model;
 
 import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.booking.BookingBaseTest;
-import ru.practicum.shareit.item.model.Item;
 
 
 import java.util.List;
