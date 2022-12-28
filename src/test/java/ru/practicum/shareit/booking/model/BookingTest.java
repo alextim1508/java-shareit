@@ -4,9 +4,6 @@ package ru.practicum.shareit.booking.model;
 import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.booking.BookingBaseTest;
 
-
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static ru.practicum.shareit.booking.model.BookingStatus.*;
