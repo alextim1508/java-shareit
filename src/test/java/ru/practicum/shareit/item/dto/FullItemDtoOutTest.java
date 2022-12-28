@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
+import ru.practicum.shareit.booking.dto.ShortBookingDtoOut;
 import ru.practicum.shareit.item.ItemBaseTest;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -84,7 +86,7 @@ public class FullItemDtoOutTest extends ItemBaseTest {
     }
 
     @Test
-    void equalsTest() {
+    void equals_shouldReturnFalseWhenIdsAreNotTheSame() {
         FullItemDtoOut x = FullItemDtoOut.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -96,10 +98,224 @@ public class FullItemDtoOutTest extends ItemBaseTest {
                 .comments(List.of(commentDtoOut))
                 .build();
 
-        assertThat(x.equals(x)).isTrue();
-        assertThat(x.equals(null)).isFalse();
-        assertThat(x.equals(new Object())).isFalse();
+        FullItemDtoOut y = FullItemDtoOut.builder()
+                .id(-1)
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .nextBooking(shortBookingDtoOut)
+                .lastBooking(shortBookingDtoOut)
+                .comments(List.of(commentDtoOut))
+                .build();
 
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenNamesAreNotTheSame() {
+        FullItemDtoOut x = FullItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .nextBooking(shortBookingDtoOut)
+                .lastBooking(shortBookingDtoOut)
+                .comments(List.of(commentDtoOut))
+                .build();
+
+        FullItemDtoOut y = FullItemDtoOut.builder()
+                .id(item.getId())
+                .name("other name")
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .nextBooking(shortBookingDtoOut)
+                .lastBooking(shortBookingDtoOut)
+                .comments(List.of(commentDtoOut))
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenDescriptionsAreNotTheSame() {
+        FullItemDtoOut x = FullItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .nextBooking(shortBookingDtoOut)
+                .lastBooking(shortBookingDtoOut)
+                .comments(List.of(commentDtoOut))
+                .build();
+
+        FullItemDtoOut y = FullItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description("other description")
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .nextBooking(shortBookingDtoOut)
+                .lastBooking(shortBookingDtoOut)
+                .comments(List.of(commentDtoOut))
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenAvailabilitiesAreNotTheSame() {
+        FullItemDtoOut x = FullItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .nextBooking(shortBookingDtoOut)
+                .lastBooking(shortBookingDtoOut)
+                .comments(List.of(commentDtoOut))
+                .build();
+
+        FullItemDtoOut y = FullItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(false)
+                .requestId(itemRequest.getId())
+                .nextBooking(shortBookingDtoOut)
+                .lastBooking(shortBookingDtoOut)
+                .comments(List.of(commentDtoOut))
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenRequestIdsAreNotTheSame() {
+        FullItemDtoOut x = FullItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .nextBooking(shortBookingDtoOut)
+                .lastBooking(shortBookingDtoOut)
+                .comments(List.of(commentDtoOut))
+                .build();
+
+        FullItemDtoOut y = FullItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(-1)
+                .nextBooking(shortBookingDtoOut)
+                .lastBooking(shortBookingDtoOut)
+                .comments(List.of(commentDtoOut))
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenNextBookingsAreNotTheSame() {
+        FullItemDtoOut x = FullItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .nextBooking(shortBookingDtoOut)
+                .lastBooking(shortBookingDtoOut)
+                .comments(List.of(commentDtoOut))
+                .build();
+
+        FullItemDtoOut y = FullItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .nextBooking(ShortBookingDtoOut.builder()
+                        .id(2)
+                        .bookerId(booker.getId())
+                        .startDate(now.plusDays(1))
+                        .endDate(now.plusDays(2))
+                        .build())
+                .lastBooking(shortBookingDtoOut)
+                .comments(List.of(commentDtoOut))
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenLastBookingsAreNotTheSame() {
+        FullItemDtoOut x = FullItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .nextBooking(shortBookingDtoOut)
+                .lastBooking(shortBookingDtoOut)
+                .comments(List.of(commentDtoOut))
+                .build();
+
+        FullItemDtoOut y = FullItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .nextBooking(shortBookingDtoOut)
+                .lastBooking(ShortBookingDtoOut.builder()
+                        .id(2)
+                        .bookerId(booker.getId())
+                        .startDate(now.plusDays(1))
+                        .endDate(now.plusDays(2))
+                        .build())
+                .comments(List.of(commentDtoOut))
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenCommentsAreNotTheSame() {
+        FullItemDtoOut x = FullItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .nextBooking(shortBookingDtoOut)
+                .lastBooking(shortBookingDtoOut)
+                .comments(List.of(commentDtoOut))
+                .build();
+
+        FullItemDtoOut y = FullItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .nextBooking(shortBookingDtoOut)
+                .lastBooking(shortBookingDtoOut)
+                .comments(Collections.emptyList())
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equalsTest() {
+        assertThat(fullItemDtoOut.equals(fullItemDtoOut)).isTrue();
+        assertThat(fullItemDtoOut.equals(null)).isFalse();
+        assertThat(fullItemDtoOut.equals(new Object())).isFalse();
     }
 
     @Test

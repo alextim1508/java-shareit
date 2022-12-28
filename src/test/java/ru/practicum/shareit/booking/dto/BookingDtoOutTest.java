@@ -1,16 +1,22 @@
 package ru.practicum.shareit.booking.dto;
 
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 import ru.practicum.shareit.booking.BookingBaseTest;
+import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.item.dto.ItemDtoIn;
+import ru.practicum.shareit.item.dto.ItemDtoOut;
+import ru.practicum.shareit.user.dto.UserDtoOut;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static ru.practicum.shareit.booking.model.BookingStatus.APPROVED;
 
 @JsonTest
 public class BookingDtoOutTest extends BookingBaseTest {
@@ -59,6 +65,153 @@ public class BookingDtoOutTest extends BookingBaseTest {
 
         assertThat(x.equals(y) && y.equals(x)).isTrue();
         assertThat(x.hashCode() == y.hashCode()).isTrue();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenIdsAreNotTheSame() {
+        BookingDtoOut x = BookingDtoOut.builder()
+                .id(booking.getId())
+                .item(itemDtoOut)
+                .booker(bookerDtoOut)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .status(booking.getStatus())
+                .build();
+
+        BookingDtoOut y = BookingDtoOut.builder()
+                .id(-1)
+                .item(itemDtoOut)
+                .booker(bookerDtoOut)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .status(booking.getStatus())
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenItemsAreNotTheSame() {
+        BookingDtoOut x = BookingDtoOut.builder()
+                .id(booking.getId())
+                .item(itemDtoOut)
+                .booker(bookerDtoOut)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .status(booking.getStatus())
+                .build();
+
+        BookingDtoOut y = BookingDtoOut.builder()
+                .id(-1)
+                .item(ItemDtoOut.builder()
+                        .id(-1)
+                        .name(item.getName())
+                        .description(item.getDescription())
+                        .available(item.getAvailable())
+                        .build())
+                .booker(bookerDtoOut)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .status(booking.getStatus())
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenBookersAreNotTheSame() {
+        BookingDtoOut x = BookingDtoOut.builder()
+                .id(booking.getId())
+                .item(itemDtoOut)
+                .booker(bookerDtoOut)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .status(booking.getStatus())
+                .build();
+
+        BookingDtoOut y = BookingDtoOut.builder()
+                .id(-1)
+                .item(itemDtoOut)
+                .booker( UserDtoOut.builder()
+                        .id(-1)
+                        .name(booker.getName())
+                        .email(booker.getEmail())
+                        .build())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .status(booking.getStatus())
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenStartDatesAreNotTheSame() {
+        BookingDtoOut x = BookingDtoOut.builder()
+                .id(booking.getId())
+                .item(itemDtoOut)
+                .booker(bookerDtoOut)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .status(booking.getStatus())
+                .build();
+
+        BookingDtoOut y = BookingDtoOut.builder()
+                .id(-1)
+                .item(itemDtoOut)
+                .booker(bookerDtoOut)
+                .startDate(booking.getStartDate().plusDays(1))
+                .endDate(booking.getEndDate())
+                .status(booking.getStatus())
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenEndDatesAreNotTheSame() {
+        BookingDtoOut x = BookingDtoOut.builder()
+                .id(booking.getId())
+                .item(itemDtoOut)
+                .booker(bookerDtoOut)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .status(booking.getStatus())
+                .build();
+
+        BookingDtoOut y = BookingDtoOut.builder()
+                .id(-1)
+                .item(itemDtoOut)
+                .booker(bookerDtoOut)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate().plusDays(1))
+                .status(booking.getStatus())
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenStatusAreNotTheSame() {
+        BookingDtoOut x = BookingDtoOut.builder()
+                .id(booking.getId())
+                .item(itemDtoOut)
+                .booker(bookerDtoOut)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .status(booking.getStatus())
+                .build();
+
+        BookingDtoOut y = BookingDtoOut.builder()
+                .id(-1)
+                .item(itemDtoOut)
+                .booker(bookerDtoOut)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .status(APPROVED)
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
     }
 
     @Test

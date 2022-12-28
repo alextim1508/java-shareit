@@ -1,6 +1,7 @@
 package ru.practicum.shareit.request.dto;
 
 
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
@@ -32,6 +33,15 @@ public class ItemRequestDtoInTest extends ItemRequestBaseTest {
 
         assertThat(x.equals(y) && y.equals(x)).isTrue();
         assertThat(x.hashCode() == y.hashCode()).isTrue();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenDescriptionsAreNotTheSame() {
+        ItemRequestDtoIn x = new ItemRequestDtoIn(itemRequest.getDescription());
+
+        ItemRequestDtoIn y = new ItemRequestDtoIn("other description");
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
     }
 
     @Test

@@ -50,7 +50,7 @@ public class ItemDtoOutTest extends ItemBaseTest {
     }
 
     @Test
-    void equalsTest() {
+    void equals_shouldReturnFalseWhenIdsAreNotTheSame() {
         ItemDtoOut x = ItemDtoOut.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -59,10 +59,106 @@ public class ItemDtoOutTest extends ItemBaseTest {
                 .requestId(itemRequest.getId())
                 .build();
 
-        assertThat(x.equals(x)).isTrue();
-        assertThat(x.equals(null)).isFalse();
-        assertThat(x.equals(new Object())).isFalse();
+        ItemDtoOut y = ItemDtoOut.builder()
+                .id(-1)
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
 
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenNamesAreNotTheSame() {
+        ItemDtoOut x = ItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
+
+        ItemDtoOut y = ItemDtoOut.builder()
+                .id(item.getId())
+                .name("other name")
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenDescriptionsAreNotTheSame() {
+        ItemDtoOut x = ItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
+
+        ItemDtoOut y = ItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description("other description")
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenAvailabilitiesAreNotTheSame() {
+        ItemDtoOut x = ItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
+
+        ItemDtoOut y = ItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(false)
+                .requestId(itemRequest.getId())
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenRequestIdsAreNotTheSame() {
+        ItemDtoOut x = ItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
+
+        ItemDtoOut y = ItemDtoOut.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(-1)
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equalsTest() {
+        assertThat(itemDtoOut.equals(itemDtoOut)).isTrue();
+        assertThat(itemDtoOut.equals(null)).isFalse();
+        assertThat(itemDtoOut.equals(new Object())).isFalse();
     }
 
     @Test

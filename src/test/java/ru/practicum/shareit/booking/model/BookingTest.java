@@ -3,9 +3,13 @@ package ru.practicum.shareit.booking.model;
 
 import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.booking.BookingBaseTest;
+import ru.practicum.shareit.item.model.Item;
 
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static ru.practicum.shareit.booking.model.BookingStatus.*;
 
 public class BookingTest extends BookingBaseTest {
@@ -73,6 +77,188 @@ public class BookingTest extends BookingBaseTest {
         assertThat(booking.getItem()).isEqualTo(item);
         assertThat(booking.getBooker()).isEqualTo(booker);
         assertThat(booking.getStatus()).isEqualTo(this.booking.getStatus());
+    }
+
+    @Test
+    void allArgsConstructor_shouldThrowNotFoundExceptionWhenStartDateIsNull() {
+        assertThatThrownBy(() -> {
+            Booking booking = new Booking(
+                    this.booking.getId(),
+                    null,
+                    this.booking.getEndDate(),
+                    item,
+                    booker,
+                    this.booking.getStatus());
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("startDate is marked non-null but is null");
+    }
+
+    @Test
+    void allArgsConstructor_shouldThrowNotFoundExceptionWhenEndDateIsNull() {
+        assertThatThrownBy(() -> {
+            Booking booking = new Booking(
+                    this.booking.getId(),
+                    this.booking.getStartDate(),
+                    null,
+                    item,
+                    booker,
+                    this.booking.getStatus());
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("endDate is marked non-null but is null");
+    }
+
+    @Test
+    void allArgsConstructor_shouldThrowNotFoundExceptionWhenItemIsNull() {
+        assertThatThrownBy(() -> {
+            Booking booking = new Booking(
+                    this.booking.getId(),
+                    this.booking.getStartDate(),
+                    this.booking.getEndDate(),
+                    null,
+                    booker,
+                    this.booking.getStatus());
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("item is marked non-null but is null");
+    }
+
+    @Test
+    void allArgsConstructor_shouldThrowNotFoundExceptionWhenBookerIsNull() {
+        assertThatThrownBy(() -> {
+            Booking booking = new Booking(
+                    this.booking.getId(),
+                    this.booking.getStartDate(),
+                    this.booking.getEndDate(),
+                    item,
+                    null,
+                    this.booking.getStatus());
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("booker is marked non-null but is null");
+    }
+
+    @Test
+    void builder_shouldReturnNotNull() {
+        Booking.BookingBuilder builder = Booking.builder()
+                .id(booking.getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .item(item)
+                .booker(booker);
+
+        assertThat(builder.toString()).contains(builder.getClass().getSimpleName());
+        assertThat(builder.build()).isNotNull();
+    }
+
+    @Test
+    void builder_shouldThrowNotFoundExceptionWhenStartDateIsNull() {
+        assertThatThrownBy(() -> {
+            Booking.builder()
+                    .id(booking.getId())
+                    .startDate(null)
+                    .endDate(booking.getEndDate())
+                    .item(item)
+                    .booker(booker);
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("startDate is marked non-null but is null");
+    }
+
+    @Test
+    void builder_shouldThrowNotFoundExceptionWhenEndDateIsNull() {
+        assertThatThrownBy(() -> {
+            Booking.builder()
+                    .id(booking.getId())
+                    .startDate(booking.getStartDate())
+                    .endDate(null)
+                    .item(item)
+                    .booker(booker);
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("endDate is marked non-null but is null");
+    }
+
+    @Test
+    void builder_shouldThrowNotFoundExceptionWhenItemIsNull() {
+        assertThatThrownBy(() -> {
+            Booking.builder()
+                    .id(booking.getId())
+                    .startDate(booking.getStartDate())
+                    .endDate(booking.getEndDate())
+                    .item(null)
+                    .booker(booker);
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("item is marked non-null but is null");
+    }
+
+    @Test
+    void builder_shouldThrowNotFoundExceptionWhenBookerIsNull() {
+        assertThatThrownBy(() -> {
+            Booking.builder()
+                    .id(booking.getId())
+                    .startDate(booking.getStartDate())
+                    .endDate(booking.getEndDate())
+                    .item(item)
+                    .booker(null);
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("booker is marked non-null but is null");
+    }
+
+
+    @Test
+    void setName_shouldThrowNotFoundExceptionWhenStartDateIsNull() {
+        Booking.BookingBuilder booking = Booking.builder()
+                .id(this.booking.getId())
+                .startDate(this.booking.getStartDate())
+                .endDate(this.booking.getEndDate())
+                .item(item)
+                .booker(booker);
+
+        assertThatThrownBy(() -> {
+            booking.startDate(null);
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("startDate is marked non-null but is null");
+    }
+
+    @Test
+    void setName_shouldThrowNotFoundExceptionWhenEndDateIsNull() {
+        Booking.BookingBuilder booking = Booking.builder()
+                .id(this.booking.getId())
+                .startDate(this.booking.getStartDate())
+                .endDate(this.booking.getEndDate())
+                .item(item)
+                .booker(booker);
+
+        assertThatThrownBy(() -> {
+            booking.endDate(null);
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("endDate is marked non-null but is null");
+    }
+
+    @Test
+    void setName_shouldThrowNotFoundExceptionWhenItemIsNull() {
+        Booking.BookingBuilder booking = Booking.builder()
+                .id(this.booking.getId())
+                .startDate(this.booking.getStartDate())
+                .endDate(this.booking.getEndDate())
+                .item(item)
+                .booker(booker);
+
+        assertThatThrownBy(() -> {
+            booking.item(null);
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("item is marked non-null but is null");
+    }
+
+    @Test
+    void setName_shouldThrowNotFoundExceptionWhenBookerIsNull() {
+        Booking.BookingBuilder booking = Booking.builder()
+                .id(this.booking.getId())
+                .startDate(this.booking.getStartDate())
+                .endDate(this.booking.getEndDate())
+                .item(item)
+                .booker(booker);
+
+        assertThatThrownBy(() -> {
+            booking.booker(null);
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("booker is marked non-null but is null");
     }
 
     @Test

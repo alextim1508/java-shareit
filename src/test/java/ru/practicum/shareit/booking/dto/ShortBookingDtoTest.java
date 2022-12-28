@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.dto;
 
 
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
@@ -48,6 +49,82 @@ public class ShortBookingDtoTest extends BookingBaseTest {
 
         assertThat(x.equals(y) && y.equals(x)).isTrue();
         assertThat(x.hashCode() == y.hashCode()).isTrue();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenIdsAreNotTheSame() {
+        ShortBookingDtoOut x = ShortBookingDtoOut.builder()
+                .id(booking.getId())
+                .bookerId(booker.getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .build();
+
+        ShortBookingDtoOut y = ShortBookingDtoOut.builder()
+                .id(-1)
+                .bookerId(booker.getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenBookerIdsAreNotTheSame() {
+        ShortBookingDtoOut x = ShortBookingDtoOut.builder()
+                .id(booking.getId())
+                .bookerId(booker.getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .build();
+
+        ShortBookingDtoOut y = ShortBookingDtoOut.builder()
+                .id(booking.getId())
+                .bookerId(-1)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenStartDatesAreNotTheSame() {
+        ShortBookingDtoOut x = ShortBookingDtoOut.builder()
+                .id(booking.getId())
+                .bookerId(booker.getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .build();
+
+        ShortBookingDtoOut y = ShortBookingDtoOut.builder()
+                .id(booking.getId())
+                .bookerId(booker.getId())
+                .startDate(booking.getStartDate().plusDays(1))
+                .endDate(booking.getEndDate())
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenEndDatesAreNotTheSame() {
+        ShortBookingDtoOut x = ShortBookingDtoOut.builder()
+                .id(booking.getId())
+                .bookerId(booker.getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .build();
+
+        ShortBookingDtoOut y = ShortBookingDtoOut.builder()
+                .id(booking.getId())
+                .bookerId(booker.getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate().plusDays(1))
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
     }
 
     @Test

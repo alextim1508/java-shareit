@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 import ru.practicum.shareit.item.ItemBaseTest;
+import ru.practicum.shareit.user.dto.UserDtoOut;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -49,7 +50,7 @@ public class CommentDtoOutTest extends ItemBaseTest {
     }
 
     @Test
-    void equalsTest() {
+    void equals_shouldReturnFalseWhenIdsAreNotTheSame() {
         CommentDtoOut x = CommentDtoOut.builder()
                 .id(comment.getId())
                 .text(comment.getText())
@@ -57,9 +58,78 @@ public class CommentDtoOutTest extends ItemBaseTest {
                 .created(comment.getCreated())
                 .build();
 
-        assertThat(x.equals(x)).isTrue();
-        assertThat(x.equals(null)).isFalse();
-        assertThat(x.equals(new Object())).isFalse();
+        CommentDtoOut y = CommentDtoOut.builder()
+                .id(-1)
+                .text(comment.getText())
+                .authorName(comment.getAuthor().getName())
+                .created(comment.getCreated())
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenTextssAreNotTheSame() {
+        CommentDtoOut x = CommentDtoOut.builder()
+                .id(comment.getId())
+                .text(comment.getText())
+                .authorName(comment.getAuthor().getName())
+                .created(comment.getCreated())
+                .build();
+
+        CommentDtoOut y = CommentDtoOut.builder()
+                .id(comment.getId())
+                .text("other text")
+                .authorName(comment.getAuthor().getName())
+                .created(comment.getCreated())
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenAuthorsAreNotTheSame() {
+        CommentDtoOut x = CommentDtoOut.builder()
+                .id(comment.getId())
+                .text(comment.getText())
+                .authorName(comment.getAuthor().getName())
+                .created(comment.getCreated())
+                .build();
+
+        CommentDtoOut y = CommentDtoOut.builder()
+                .id(comment.getId())
+                .text(comment.getText())
+                .authorName("other author")
+                .created(comment.getCreated())
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenCreateDateAreNotTheSame() {
+        CommentDtoOut x = CommentDtoOut.builder()
+                .id(comment.getId())
+                .text(comment.getText())
+                .authorName(comment.getAuthor().getName())
+                .created(comment.getCreated())
+                .build();
+
+        CommentDtoOut y = CommentDtoOut.builder()
+                .id(comment.getId())
+                .text(comment.getText())
+                .authorName(comment.getAuthor().getName())
+                .created(comment.getCreated().plusDays(1))
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equalsTest() {
+        assertThat(commentDtoOut.equals(commentDtoOut)).isTrue();
+        assertThat(commentDtoOut.equals(null)).isFalse();
+        assertThat(commentDtoOut.equals(new Object())).isFalse();
     }
 
     @Test

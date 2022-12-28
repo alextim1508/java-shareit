@@ -1,9 +1,13 @@
 package ru.practicum.shareit.user.model;
 
 import org.junit.jupiter.api.Test;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserBaseTest;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class UserTest extends UserBaseTest {
 
@@ -31,7 +35,6 @@ public class UserTest extends UserBaseTest {
         assertThat(user.equals(new Object())).isFalse();
     }
 
-
     @Test
     void testNoArgsConstructorAndGettersSetters() {
         User user = new User();
@@ -53,6 +56,73 @@ public class UserTest extends UserBaseTest {
         assertThat(user.getEmail()).isEqualTo(this.user.getEmail());
     }
 
+    @Test
+    void allArgsConstructor_shouldThrowNotFoundExceptionWhenNameIsNull() {
+        assertThatThrownBy(() -> {
+            new User(this.user.getId(), null, this.user.getEmail());
+        }).isInstanceOf(NullPointerException.class)
+          .hasMessage("name is marked non-null but is null");
+    }
+
+    @Test
+    void allArgsConstructor_shouldThrowNotFoundExceptionWhenEmailIsNull() {
+        assertThatThrownBy(() -> {
+            new User(this.user.getId(), this.user.getName(), null);
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("email is marked non-null but is null");
+    }
+
+    @Test
+    void builder_shouldThrowNotFoundExceptionWhenNameIsNull() {
+        assertThatThrownBy(() -> {
+            User.builder()
+                    .id(this.user.getId())
+                    .name(null)
+                    .email(this.user.getEmail())
+                    .build();
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("name is marked non-null but is null");
+    }
+
+    @Test
+    void builder_shouldThrowNotFoundExceptionWhenEmailIsNull() {
+        assertThatThrownBy(() -> {
+            User.builder()
+                    .id(this.user.getId())
+                    .name(this.user.getName())
+                    .email(null)
+                    .build();
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("email is marked non-null but is null");
+    }
+
+    @Test
+    void setName_shouldThrowNotFoundExceptionWhenNameIsNull() {
+        User user = User.builder()
+                .id(this.user.getId())
+                .name(this.user.getName())
+                .email(this.user.getEmail())
+                .build();
+
+        assertThatThrownBy(() -> {
+            user.setName(null);
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("name is marked non-null but is null");
+    }
+
+    @Test
+    void setDescription_shouldThrowNotFoundExceptionWhenDescriptionIsNull() {
+        User user = User.builder()
+                .id(this.user.getId())
+                .name(this.user.getName())
+                .email(this.user.getEmail())
+                .build();
+
+        assertThatThrownBy(() -> {
+            user.setEmail(null);
+        }).isInstanceOf(NullPointerException.class)
+          .hasMessage("email is marked non-null but is null");
+    }
 
     @Test
     void testBuilderAndToString() {

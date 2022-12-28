@@ -25,6 +25,15 @@ public class CommentDtoInTest extends ItemBaseTest {
     }
 
     @Test
+    void equals_shouldReturnFalseWhenTextsAreNotTheSame() {
+        CommentDtoIn x = new CommentDtoIn(comment.getText());
+
+        CommentDtoIn y = new CommentDtoIn("other text");
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
     void equalsAndHashCodeTest() {
         CommentDtoIn x = new CommentDtoIn(comment.getText());
 
@@ -36,11 +45,9 @@ public class CommentDtoInTest extends ItemBaseTest {
 
     @Test
     void equalsTest() {
-        CommentDtoIn x = new CommentDtoIn(comment.getText());
-
-        assertThat(x.equals(x)).isTrue();
-        assertThat(x.equals(null)).isFalse();
-        assertThat(x.equals(new Object())).isFalse();
+        assertThat(commentDtoIn.equals(commentDtoIn)).isTrue();
+        assertThat(commentDtoIn.equals(null)).isFalse();
+        assertThat(commentDtoIn.equals(new Object())).isFalse();
     }
 
     @Test

@@ -18,19 +18,16 @@ import java.time.LocalDateTime;
 public class BookingDtoIn {
 
     @NotNull
-    @NonNull
     private Integer itemId;
 
     @Future
     @NotNull
-    @NonNull
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @JsonProperty("start")
     private LocalDateTime startDate;
 
     @Future
     @NotNull
-    @NonNull
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @JsonProperty("end")
     private LocalDateTime endDate;

@@ -58,6 +58,63 @@ public class ItemRequestDtoOutTest extends ItemRequestBaseTest {
     }
 
     @Test
+    void equals_shouldReturnFalseWhenIdsAreNotTheSame() {
+        ItemRequestDtoOut x = ItemRequestDtoOut.builder()
+                .id(itemRequest.getId())
+                .description(itemRequest.getDescription())
+                .created(itemRequest.getCreated())
+                .items(List.of(itemDtoOut))
+                .build();
+
+        ItemRequestDtoOut y = ItemRequestDtoOut.builder()
+                .id(-1)
+                .description(itemRequest.getDescription())
+                .created(itemRequest.getCreated())
+                .items(List.of(itemDtoOut))
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenDescriptionsAreNotTheSame() {
+        ItemRequestDtoOut x = ItemRequestDtoOut.builder()
+                .id(itemRequest.getId())
+                .description(itemRequest.getDescription())
+                .created(itemRequest.getCreated())
+                .items(List.of(itemDtoOut))
+                .build();
+
+        ItemRequestDtoOut y = ItemRequestDtoOut.builder()
+                .id(itemRequest.getId())
+                .description("other description")
+                .created(itemRequest.getCreated())
+                .items(List.of(itemDtoOut))
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenCreatedDatesAreNotTheSame() {
+        ItemRequestDtoOut x = ItemRequestDtoOut.builder()
+                .id(itemRequest.getId())
+                .description(itemRequest.getDescription())
+                .created(itemRequest.getCreated())
+                .items(List.of(itemDtoOut))
+                .build();
+
+        ItemRequestDtoOut y = ItemRequestDtoOut.builder()
+                .id(itemRequest.getId())
+                .description(itemRequest.getDescription())
+                .created(itemRequest.getCreated().plusDays(1))
+                .items(List.of(itemDtoOut))
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
     void equalsTest() {
         assertThat(itemRequestDtoOut.equals(itemRequestDtoOut)).isTrue();
         assertThat(itemRequestDtoOut.equals(null)).isFalse();

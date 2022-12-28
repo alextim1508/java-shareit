@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.dto;
 
 
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
@@ -44,6 +45,56 @@ public class UserDtoOutTest extends UserBaseTest {
         assertThat(x.hashCode() == y.hashCode()).isTrue();
     }
 
+    @Test
+    void equals_shouldReturnFalseWhenIdsAreNotTheSame() {
+        UserDtoOut x = UserDtoOut.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
+
+        UserDtoOut y = UserDtoOut.builder()
+                .id(-1)
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenNamesAreNotTheSame() {
+        UserDtoOut x = UserDtoOut.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
+
+        UserDtoOut y = UserDtoOut.builder()
+                .id(user.getId())
+                .name("other name")
+                .email(user.getEmail())
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenEmailsAreNotTheSame() {
+        UserDtoOut x = UserDtoOut.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
+
+        UserDtoOut y = UserDtoOut.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email("other@mail.com")
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
     @Test
     void equalsTest() {
         assertThat(userDtoOut.equals(userDtoOut)).isTrue();

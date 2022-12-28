@@ -1,12 +1,14 @@
 package ru.practicum.shareit.booking.dto;
 
 
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 import ru.practicum.shareit.booking.BookingBaseTest;
+import ru.practicum.shareit.item.dto.ItemDtoIn;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -49,10 +51,61 @@ public class BookingDtoInTest extends BookingBaseTest {
     }
 
     @Test
+    void equals_shouldReturnFalseWhenItemIdsAreNotTheSame() {
+        BookingDtoIn x = BookingDtoIn.builder()
+                .itemId(booking.getItem().getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .build();
+
+        BookingDtoIn y = BookingDtoIn.builder()
+                .itemId(-1)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenStartDatesAreNotTheSame() {
+        BookingDtoIn x = BookingDtoIn.builder()
+                .itemId(booking.getItem().getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .build();
+
+        BookingDtoIn y = BookingDtoIn.builder()
+                .itemId(-1)
+                .startDate(booking.getStartDate().plusDays(1))
+                .endDate(booking.getEndDate())
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenEndDatesAreNotTheSame() {
+        BookingDtoIn x = BookingDtoIn.builder()
+                .itemId(booking.getItem().getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .build();
+
+        BookingDtoIn y = BookingDtoIn.builder()
+                .itemId(-1)
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate().plusDays(1))
+                .build();
+
+        AssertionsForClassTypes.assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
     void equalsTest() {
-        assertThat(item.equals(item)).isTrue();
-        assertThat(item.equals(null)).isFalse();
-        assertThat(item.equals(new Object())).isFalse();
+        assertThat(itemDtoIn.equals(itemDtoIn)).isTrue();
+        assertThat(itemDtoIn.equals(null)).isFalse();
+        assertThat(itemDtoIn.equals(new Object())).isFalse();
     }
 
     @Test

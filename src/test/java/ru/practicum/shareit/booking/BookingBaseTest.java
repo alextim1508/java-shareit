@@ -5,6 +5,7 @@ import ru.practicum.shareit.booking.dto.BookingDtoIn;
 import ru.practicum.shareit.booking.dto.BookingDtoOut;
 import ru.practicum.shareit.booking.dto.ShortBookingDtoOut;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.item.dto.ItemDtoIn;
 import ru.practicum.shareit.item.dto.ItemDtoOut;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dto.UserDtoOut;
@@ -20,6 +21,7 @@ public class BookingBaseTest {
     protected UserDtoOut bookerDtoOut;
 
     protected Item item;
+    protected ItemDtoIn itemDtoIn;
     protected ItemDtoOut itemDtoOut;
 
     protected Booking booking;
@@ -59,6 +61,12 @@ public class BookingBaseTest {
                 .booker(booker)
                 .item(item)
                 .status(WAITING)
+                .build();
+
+        itemDtoIn = ItemDtoIn.builder()
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
                 .build();
 
         itemDtoOut = ItemDtoOut.builder()

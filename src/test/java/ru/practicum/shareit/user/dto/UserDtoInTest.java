@@ -41,6 +41,35 @@ public class UserDtoInTest extends UserDtoOutTest {
         assertThat(x.hashCode() == y.hashCode()).isTrue();
     }
 
+    void equals_shouldReturnFalseWhenNamesAreNotTheSame() {
+        UserDtoIn x = UserDtoIn.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
+
+        UserDtoIn y = UserDtoIn.builder()
+                .name("other name")
+                .email(user.getEmail())
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenEmailsAreNotTheSame() {
+        UserDtoIn x = UserDtoIn.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
+
+        UserDtoIn y = UserDtoIn.builder()
+                .name(user.getName())
+                .email("other@mail.com")
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
     @Test
     void equalsTest() {
         assertThat(userDtoIn.equals(userDtoIn)).isTrue();

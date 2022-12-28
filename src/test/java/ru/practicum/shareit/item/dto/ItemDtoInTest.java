@@ -8,6 +8,7 @@ import org.springframework.boot.test.json.JsonContent;
 import ru.practicum.shareit.item.ItemBaseTest;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -47,10 +48,86 @@ public class ItemDtoInTest extends ItemBaseTest {
     }
 
     @Test
+    void equals_shouldReturnFalseWhenNamesAreNotTheSame() {
+        ItemDtoIn x = ItemDtoIn.builder()
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
+
+        ItemDtoIn y = ItemDtoIn.builder()
+                .name("other name")
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenDescriptionsAreNotTheSame() {
+        ItemDtoIn x = ItemDtoIn.builder()
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
+
+        ItemDtoIn y = ItemDtoIn.builder()
+                .name(item.getName())
+                .description("other description")
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenAvailabilitiesAreNotTheSame() {
+        ItemDtoIn x = ItemDtoIn.builder()
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
+
+        ItemDtoIn y = ItemDtoIn.builder()
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(false)
+                .requestId(itemRequest.getId())
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
+    void equals_shouldReturnFalseWhenRequestIdsAreNotTheSame() {
+        ItemDtoIn x = ItemDtoIn.builder()
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(itemRequest.getId())
+                .build();
+
+        ItemDtoIn y = ItemDtoIn.builder()
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(-1)
+                .build();
+
+        assertThat(x.equals(y)).isFalse();
+    }
+
+    @Test
     void equalsTest() {
-        assertThat(item.equals(item)).isTrue();
-        assertThat(item.equals(null)).isFalse();
-        assertThat(item.equals(new Object())).isFalse();
+        assertThat(itemDtoIn.equals(itemDtoIn)).isTrue();
+        assertThat(itemDtoIn.equals(null)).isFalse();
+        assertThat(itemDtoIn.equals(new Object())).isFalse();
     }
 
     @Test

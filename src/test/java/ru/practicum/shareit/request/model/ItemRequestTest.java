@@ -6,12 +6,13 @@ import ru.practicum.shareit.request.ItemRequestBaseTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ItemRequestTest extends ItemRequestBaseTest {
 
 
     @Test
-    void equalsTest() {
+    void equalsAndHashCodeTest() {
         ItemRequest x = ItemRequest.builder()
                 .id(1)
                 .description("description")
@@ -33,14 +34,13 @@ public class ItemRequestTest extends ItemRequestBaseTest {
     }
 
     @Test
-    void requiredArgsConstructorTest() {
-        String description = "description";
-
-        ItemRequest itemRequest = new ItemRequest(description, requester);
-
-        assertThat(itemRequest.getDescription()).isEqualTo(description);
-        assertThat(itemRequest.getRequestor()).isEqualTo(requester);
+    void equalsTest() {
+        assertThat(itemRequest.equals(itemRequest)).isTrue();
+        assertThat(itemRequest.equals(null)).isFalse();
+        assertThat(itemRequest.equals(new Object())).isFalse();
     }
+
+
 
     @Test
     void noArgsConstructorTest() {
@@ -74,12 +74,109 @@ public class ItemRequestTest extends ItemRequestBaseTest {
         assertThat(itemRequest.getItems()).isEqualTo(List.of(item));
     }
 
+    @Test
+    void allArgsConstructor_shouldThrowNotFoundExceptionWheDescriptionIsNull() {
+        assertThatThrownBy(() -> {
+            ItemRequest itemRequest = new ItemRequest(
+                    this.itemRequest.getId(),
+                    null,
+                    this.itemRequest.getCreated(),
+                    requester,
+                    List.of(item));
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("description is marked non-null but is null");
+    }
+
+    @Test
+    void allArgsConstructor_shouldThrowNotFoundExceptionWheRequestorIsNull() {
+        assertThatThrownBy(() -> {
+            ItemRequest itemRequest = new ItemRequest(
+                    this.itemRequest.getId(),
+                    this.itemRequest.getDescription(),
+                    this.itemRequest.getCreated(),
+                    null,
+                    List.of(item));
+        }).isInstanceOf(NullPointerException.class)
+                .hasMessage("requestor is marked non-null but is null");
+    }
+
+    @Test
+    void builder_shouldReturnNotNull() {
+        ItemRequest.ItemRequestBuilder builder = ItemRequest.builder()
+                .id(itemRequest.getId())
+                .description(itemRequest.getDescription())
+                .requestor(requester)
+                .created(now)
+                .items(List.of(item));
+
+        assertThat(builder.toString()).contains(builder.getClass().getSimpleName());
+        assertThat(builder.build()).isNotNull();
+    }
+
+    @Test
+    void builder_shouldThrowNotFoundExceptionWhenDescriptionIsNull() {
+        assertThatThrownBy(() -> {
+            ItemRequest.builder()
+                    .id(itemRequest.getId())
+                    .description(null)
+                    .requestor(requester)
+                    .created(now)
+                    .items(List.of(item))
+                    .build();
+
+        }).isInstanceOf(NullPointerException.class)
+          .hasMessage("description is marked non-null but is null");
+    }
+
+    @Test
+    void builder_shouldThrowNotFoundExceptionWhenRequestorIsNull() {
+        assertThatThrownBy(() -> {
+            ItemRequest.builder()
+                    .id(itemRequest.getId())
+                    .description(itemRequest.getDescription())
+                    .requestor(null)
+                    .created(now)
+                    .items(List.of(item))
+                    .build();
+
+        }).isInstanceOf(NullPointerException.class)
+          .hasMessage("requestor is marked non-null but is null");
+    }
+
+    @Test
+    void setDescription_shouldThrowNotFoundExceptionWhenDescriptionIsNull() {
+        ItemRequest itemRequest = ItemRequest.builder()
+                .id(this.itemRequest.getId())
+                .description(this.itemRequest.getDescription())
+                .requestor(requester)
+                .created(now)
+                .items(List.of(item))
+                .build();
+
+        assertThatThrownBy(() -> {
+            itemRequest.setDescription(null);
+        }).isInstanceOf(NullPointerException.class)
+          .hasMessage("description is marked non-null but is null");
+    }
+
+    @Test
+    void setRequestor_shouldThrowNotFoundExceptionWhenDescriptionIsNull() {
+        ItemRequest itemRequest = ItemRequest.builder()
+                .id(this.itemRequest.getId())
+                .description(this.itemRequest.getDescription())
+                .requestor(requester)
+                .created(now)
+                .items(List.of(item))
+                .build();
+
+        assertThatThrownBy(() -> {
+            itemRequest.setRequestor(null);
+        }).isInstanceOf(NullPointerException.class)
+          .hasMessage("requestor is marked non-null but is null");
+    }
 
     @Test
     void toStringTest() {
-        String description = "description";
-        ItemRequest itemRequest = new ItemRequest(description, requester);
-
         assertThat(itemRequest.toString()).startsWith(itemRequest.getClass().getSimpleName());
     }
 }
