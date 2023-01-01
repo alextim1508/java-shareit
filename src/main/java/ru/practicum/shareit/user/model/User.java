@@ -3,27 +3,40 @@ package ru.practicum.shareit.user.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
-@Data
 @Table(name = "users")
-@NoArgsConstructor
-@RequiredArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "name", nullable = false)
     @NonNull
     private String name;
 
+    @Column(name = "email", nullable = false, unique = true)
     @NonNull
     private String email;
 
-    public User(Integer id) {
-        this.id = id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return name.equals(user.name) && email.equals(user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, email);
     }
 }

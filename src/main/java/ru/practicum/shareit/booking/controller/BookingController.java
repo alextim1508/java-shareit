@@ -2,129 +2,98 @@ package ru.practicum.shareit.booking.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.dto.BookingDtoIn;
+import ru.practicum.shareit.booking.dto.BookingDtoOutAbs;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.util.exception.UnsupportedStatusException;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
-import java.util.Collection;
+import javax.validation.constraints.Min;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static ru.practicum.shareit.booking.controller.BookingDto.toBooking;
-import static ru.practicum.shareit.booking.controller.BookingDto.toBookingDto;
+import static ru.practicum.shareit.user.controller.UserController.USER_ID_HEADER;
+import static ru.practicum.shareit.util.Util.DEFAULT_PAGE_SIZE;
 
 
 @RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
+@Validated
 @Slf4j
 public class BookingController {
 
     private final BookingService bookingService;
 
-    @PostMapping
-    public BookingDto create(@RequestHeader(value = "X-Sharer-User-Id") int userId,
-                              @Valid @RequestBody BookingDto bookingDto,
-                              BindingResult result) {
-        if (result.getErrorCount() != 0) {
-            log.error("Validation errors: {}", result.getAllErrors());
-            throw new ValidationException();
-        }
-
-        Booking booking = bookingService.create(toBooking(bookingDto, userId));
-
-        return toBookingDto(booking);
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public BookingDtoOutAbs create(@RequestHeader(value = USER_ID_HEADER) int userId,
+                                   @Valid @RequestBody BookingDtoIn bookingDtoIn) {
+        return bookingService.create(bookingDtoIn, userId);
     }
-
-
-    @PatchMapping("/{bookingId}")
-    public BookingDto setApproved(@PathVariable("bookingId") int id,
-                                   @RequestParam("approved") boolean isApproved,
-                                   @RequestHeader(value = "X-Sharer-User-Id") int ownerId) {
-        Booking booking = bookingService.setApproved(id, ownerId, isApproved);
-
-        return toBookingDto(booking, booking.getBooker(), booking.getItem());
-    }
-
 
     @GetMapping("/{id}")
-    public BookingDto getById(@PathVariable("id") int id,
-                               @RequestHeader(value = "X-Sharer-User-Id") int ownerId) {
-        Booking byId = bookingService.getById(id, ownerId);
-
-        return toBookingDto(byId, byId.getBooker(), byId.getItem());
+    public BookingDtoOutAbs getById(@PathVariable("id") int id,
+                                    @RequestHeader(value = USER_ID_HEADER) int ownerId) {
+        return bookingService.getById(id, ownerId);
     }
 
     @GetMapping
-    public List<BookingDto> getAllByBooker(@RequestParam(value = "state", required = false, defaultValue = "ALL") String state,
-                                            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
-        Collection<Booking> bookings;
-
+    public List<? extends BookingDtoOutAbs> getAllByBooker(
+            @RequestParam(value = "state", required = false, defaultValue = "ALL") String state,
+            @RequestHeader(value = USER_ID_HEADER) int userId,
+            @Min(0) @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
+            @Min(1) @RequestParam(value = "size", required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer size) {
         switch (state) {
             case "ALL":
-                bookings = bookingService.getAllByBooker(userId);
-                break;
+                return bookingService.getAllByBooker(userId, from, size);
             case "CURRENT":
-                bookings = bookingService.getCurrentBookingByBooker(userId);
-                break;
+                return bookingService.getCurrentBookingByBooker(userId, from, size);
             case "PAST":
-                bookings = bookingService.getPastBookingByBooker(userId);
-                break;
+                return bookingService.getPastBookingByBooker(userId, from, size);
             case "FUTURE":
-                bookings = bookingService.getFutureBookingByBooker(userId);
-                break;
+                return bookingService.getFutureBookingByBooker(userId, from, size);
             case "WAITING":
-                bookings = bookingService.getBookingByBookerAndStatus(userId, BookingStatus.WAITING);
-                break;
+                return bookingService.getBookingByBookerAndStatus(userId, BookingStatus.WAITING, from, size);
             case "REJECTED":
-                bookings = bookingService.getBookingByBookerAndStatus(userId, BookingStatus.REJECTED);
-                break;
+                return bookingService.getBookingByBookerAndStatus(userId, BookingStatus.REJECTED, from, size);
             default:
                 throw new UnsupportedStatusException(state);
         }
-
-        return bookings.stream()
-                .map(booking -> toBookingDto(booking, booking.getBooker(), booking.getItem()))
-                .collect(Collectors.toList());
     }
 
     @GetMapping("/owner")
-    public List<BookingDto> getAllByOwner(@RequestParam(value = "state", required = false, defaultValue = "ALL") String state,
-                                           @RequestHeader(value = "X-Sharer-User-Id") int userId) {
-        Collection<Booking> bookings;
-
+    public List<? extends BookingDtoOutAbs> getAllByOwner(
+            @RequestParam(value = "state", required = false, defaultValue = "ALL") String state,
+            @RequestHeader(value = USER_ID_HEADER) int userId,
+            @Min(0) @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
+            @Min(1) @RequestParam(value = "size", required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer size) {
         switch (state) {
             case "ALL":
-                bookings = bookingService.getAllByOwner(userId);
-                break;
+                return bookingService.getAllByOwner(userId, from, size);
             case "CURRENT":
-                bookings = bookingService.getCurrentBookingByOwner(userId);
-                break;
+                return bookingService.getCurrentBookingByOwner(userId, from, size);
             case "PAST":
-                bookings = bookingService.getPastBookingByOwner(userId);
-                break;
+                return bookingService.getPastBookingByOwner(userId, from, size);
             case "FUTURE":
-                bookings = bookingService.getFutureBookingByOwner(userId);
-                break;
+                return bookingService.getFutureBookingByOwner(userId, from, size);
             case "WAITING":
-                bookings = bookingService.getBookingByOwnerAndStatus(userId, BookingStatus.WAITING);
-                break;
+                return bookingService.getBookingByOwnerAndStatus(userId, BookingStatus.WAITING, from, size);
             case "REJECTED":
-                bookings = bookingService.getBookingByOwnerAndStatus(userId, BookingStatus.REJECTED);
-                break;
-
+                return bookingService.getBookingByOwnerAndStatus(userId, BookingStatus.REJECTED, from, size);
             default:
                 throw new UnsupportedStatusException(state);
         }
+    }
 
-        return bookings.stream()
-                .map(booking -> toBookingDto(booking, booking.getBooker(), booking.getItem()))
-                .collect(Collectors.toList());
+    @PatchMapping("/{bookingId}")
+    public BookingDtoOutAbs setApproved(@PathVariable("bookingId") int id,
+                                        @RequestParam("approved") boolean isApproved,
+                                        @RequestHeader(value = USER_ID_HEADER) int ownerId) {
+
+        return bookingService.approve(id, ownerId, isApproved);
     }
 
     @DeleteMapping("/{id}")

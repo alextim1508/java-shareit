@@ -2,19 +2,21 @@ package ru.practicum.shareit.item.model;
 
 import lombok.*;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.requests.model.ItemRequest;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Table(name = "items")
 @Entity
-@Data
+@Setter
+@Getter
+@ToString
+@Builder
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class Item {
 
@@ -38,37 +40,43 @@ public class Item {
     @ManyToOne
     private ItemRequest request;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item",
+               orphanRemoval = true,
+               cascade = CascadeType.REMOVE)
     @OrderBy("startDate ASC")
-    private Set<Booking> bookings;
+    @Singular
+    @ToString.Exclude
+    private List<Booking> bookings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "item")
-    private List<Comment> comments;
+    @OneToMany(mappedBy = "item",
+            orphanRemoval = true,
+            cascade = CascadeType.REMOVE)
+    @Singular
+    @ToString.Exclude
+    private List<Comment> comments = new ArrayList<>();
 
-    public Item(Integer id) {
-        this.id = id;
-    }
+    @Transient
+    @ToString.Exclude
+    private Booking lastBooking;
 
-    @Override
-    public String toString() {
-        return "Item{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", available=" + available +
-                '}';
-    }
+    @Transient
+    @ToString.Exclude
+    private Booking nextBooking;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return Objects.equals(id, item.id) && name.equals(item.name) && description.equals(item.description);
+        return  name.equals(item.name) &&
+                description.equals(item.description) &&
+                available.equals(item.available) &&
+                owner.equals(item.owner) &&
+                Objects.equals(request, item.request);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description);
+        return Objects.hash(name, description, available, owner, request);
     }
 }

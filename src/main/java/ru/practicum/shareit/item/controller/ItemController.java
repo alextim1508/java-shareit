@@ -5,27 +5,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.dto.CommentDtoIn;
+import ru.practicum.shareit.item.dto.CommentDtoOutAbs;
+import ru.practicum.shareit.item.dto.ItemDtoIn;
+import ru.practicum.shareit.item.dto.ItemDtoOutAbs;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.util.validator.NullAllowed;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import static ru.practicum.shareit.booking.service.BookingServiceImpl.getLastBooking;
-import static ru.practicum.shareit.booking.service.BookingServiceImpl.getNextBooking;
-import static ru.practicum.shareit.item.controller.CommentDto.toComment;
-import static ru.practicum.shareit.item.controller.CommentDto.toCommentDto;
-import static ru.practicum.shareit.item.controller.ItemDto.toItem;
-import static ru.practicum.shareit.item.controller.ItemDto.toItemDto;
-
+import static ru.practicum.shareit.user.controller.UserController.USER_ID_HEADER;
 
 @RestController
 @RequestMapping("/items")
@@ -36,77 +27,32 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public ItemDto create(@RequestHeader(value = "X-Sharer-User-Id") int ownerId,
-                           @Valid @RequestBody ItemDto itemDto,
-                           BindingResult result) {
-        if (result.getErrorCount() != 0) {
-            log.error("Validation errors: {}", result.getAllErrors());
-            throw new ValidationException();
-        }
-
-        return toItemDto(itemService.create(toItem(itemDto, ownerId)));
+    public ItemDtoOutAbs create(@RequestHeader(value = USER_ID_HEADER) int ownerId,
+                                @Valid @RequestBody ItemDtoIn itemDto) {
+        return itemService.create(itemDto, ownerId);
     }
 
     @GetMapping("/{id}")
-    public ItemDtoWithNearestBooking getById(@RequestHeader(value = "X-Sharer-User-Id") int ownerId,
-                                              @PathVariable("id") int id) {
-
-        LocalDateTime now = LocalDateTime.now();
-
-        Item byId = itemService.getById(id);
-
-        Set<Booking> bookings = byId.getBookings();
-
-        Booking lastBooking = null;
-        Booking nextBooking = null;
-
-        if (bookings != null && !bookings.isEmpty() && byId.getOwner().getId().equals(ownerId)) {
-            lastBooking = getLastBooking(bookings, now);
-            nextBooking = getNextBooking(bookings, now);
-        }
-
-        return new ItemDtoWithNearestBooking(byId, lastBooking, nextBooking);
-    }
-
-    @GetMapping("/search")
-    public List<ItemDto> search(@RequestParam("text") String pattern) {
-        return itemService.getAll(pattern, true).stream().map(ItemDto::toItemDto).collect(Collectors.toList());
+    public ItemDtoOutAbs getById(@RequestHeader(value = USER_ID_HEADER) int ownerId,
+                                 @PathVariable("id") int id) {
+        return itemService.getById(id, ownerId);
     }
 
     @GetMapping
-    public List<ItemDto> getAll(@RequestHeader(value = "X-Sharer-User-Id") int userId) {
-        Collection<Item> all = itemService.getAll(userId);
+    public List<? extends ItemDtoOutAbs> getAll(@RequestHeader(value = USER_ID_HEADER) int userId) {
+        return itemService.getAvailableItemByOwner(userId);
+    }
 
-        return all.stream().sorted(Comparator.comparingInt(Item::getId)).map(item -> {
-
-            //todo Как Вы считаете , уместна ли здесь данная логика (логика по поиску  предыдущего и следующего букинга) ?
-            Set<Booking> bookings = item.getBookings();
-
-            LocalDateTime now = LocalDateTime.now();
-
-            Booking lastBooking = null;
-            Booking nextBooking = null;
-
-            if (bookings != null && !bookings.isEmpty() && item.getOwner().getId().equals(userId)) {
-                lastBooking = getLastBooking(bookings, now);
-                nextBooking = getNextBooking(bookings, now);
-            }
-
-            return new ItemDtoWithNearestBooking(item, lastBooking, nextBooking);
-        }).collect(Collectors.toList());
+    @GetMapping("/search")
+    public List<? extends ItemDtoOutAbs> search(@RequestParam("text") String pattern) {
+        return itemService.getAvailableItemByPattern(pattern);
     }
 
     @PatchMapping("/{id}")
-    public ItemDto update(@PathVariable("id") int id,
-                           @RequestHeader(value = "X-Sharer-User-Id") Integer userId,
-                           @Validated(NullAllowed.class) @RequestBody ItemDto itemDto,
-                           BindingResult result) {
-        if (result.getErrorCount() != 0) {
-            log.error("Validation errors: {}", result.getAllErrors());
-            throw new ValidationException();
-        }
-
-        return toItemDto(itemService.update(id, itemDto, userId));
+    public ItemDtoOutAbs update(@PathVariable("id") int id,
+                                @RequestHeader(value = USER_ID_HEADER) Integer userId,
+                                @Validated(NullAllowed.class) @RequestBody ItemDtoIn itemDto) {
+        return itemService.update(id, itemDto, userId);
     }
 
     @DeleteMapping("/{id}")
@@ -116,15 +62,15 @@ public class ItemController {
 
 
     @PostMapping("/{id}/comment")
-    public CommentDto create(@PathVariable("id") int id,
-                             @RequestHeader(value = "X-Sharer-User-Id") int userId,
-                             @Valid @RequestBody CommentDto commentDto,
-                             BindingResult result) {
+    public CommentDtoOutAbs create(@PathVariable("id") int itemId,
+                                   @RequestHeader(value = USER_ID_HEADER) int userId,
+                                   @Valid @RequestBody CommentDtoIn commentDtoIn,
+                                   BindingResult result) {
         if (result.getErrorCount() != 0) {
             log.error("Validation errors: {}", result.getAllErrors());
             throw new ValidationException();
         }
 
-        return toCommentDto(itemService.create(toComment(commentDto, userId, id)));
+        return itemService.create(commentDtoIn, itemId, userId);
     }
 }

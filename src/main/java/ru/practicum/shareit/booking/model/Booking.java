@@ -6,14 +6,16 @@ import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Table(name = "bookings")
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@Builder
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 public class Booking {
 
     @Id
@@ -22,18 +24,35 @@ public class Booking {
 
     @NonNull
     private LocalDateTime startDate;
+
     @NonNull
     private LocalDateTime endDate;
 
     @NonNull
-    @ManyToOne()
+    @ManyToOne
     private Item item;
 
     @NonNull
-    @ManyToOne()
+    @ManyToOne
     private User booker;
 
-    @NonNull
     @Enumerated(value = EnumType.STRING)
     private BookingStatus status;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Booking booking = (Booking) o;
+        return  startDate.equals(booking.startDate) &&
+                endDate.equals(booking.endDate) &&
+                item.equals(booking.item) &&
+                booker.equals(booking.booker) &&
+                status == booking.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startDate, endDate, item, booker, status);
+    }
 }
