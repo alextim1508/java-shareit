@@ -33,7 +33,6 @@ public class ErrorHandler {
         return "Not found";
     }
 
-
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleValidationException(ValidationException e) {

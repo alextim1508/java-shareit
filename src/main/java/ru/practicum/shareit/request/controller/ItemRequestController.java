@@ -2,7 +2,6 @@ package ru.practicum.shareit.request.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemRequestDtoIn;
@@ -10,7 +9,6 @@ import ru.practicum.shareit.request.dto.ItemRequestDtoOutAbs;
 import ru.practicum.shareit.request.service.ItemRequestService;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 import javax.validation.constraints.Min;
 import java.util.List;
 
@@ -29,13 +27,7 @@ public class ItemRequestController {
 
     @PostMapping
     public ItemRequestDtoOutAbs create(@RequestHeader(value = USER_ID_HEADER) int userId,
-                                       @Valid @RequestBody ItemRequestDtoIn itemRequestDtoIn,
-                                       BindingResult result) {
-        if (result.getErrorCount() != 0) {
-            log.error("Validation errors: {}", result.getAllErrors());
-            throw new ValidationException();
-        }
-
+                                       @Valid @RequestBody ItemRequestDtoIn itemRequestDtoIn) {
         return itemRequestService.create(itemRequestDtoIn, userId);
     }
 

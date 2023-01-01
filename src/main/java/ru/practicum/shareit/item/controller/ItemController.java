@@ -28,13 +28,7 @@ public class ItemController {
 
     @PostMapping
     public ItemDtoOutAbs create(@RequestHeader(value = USER_ID_HEADER) int ownerId,
-                                @Valid @RequestBody ItemDtoIn itemDto,
-                                BindingResult result) {
-        if (result.getErrorCount() != 0) {
-            log.error("Validation errors: {}", result.getAllErrors());
-            throw new ValidationException();
-        }
-
+                                @Valid @RequestBody ItemDtoIn itemDto) {
         return itemService.create(itemDto, ownerId);
     }
 

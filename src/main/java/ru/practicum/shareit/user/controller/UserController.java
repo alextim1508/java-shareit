@@ -2,7 +2,6 @@ package ru.practicum.shareit.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDtoIn;
@@ -11,7 +10,6 @@ import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.util.validator.NullAllowed;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 import java.util.List;
 
 
@@ -26,13 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public UserDtoOutAbs create(@Valid @RequestBody UserDtoIn userDtoIn,
-                                BindingResult result) {
-        if (result.getErrorCount() != 0) {
-            log.error("Validation errors: {}", result.getAllErrors());
-            throw new ValidationException();
-        }
-
+    public UserDtoOutAbs create(@Valid @RequestBody UserDtoIn userDtoIn) {
         return userService.create(userDtoIn);
     }
 

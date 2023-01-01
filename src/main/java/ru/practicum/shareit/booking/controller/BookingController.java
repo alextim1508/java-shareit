@@ -3,7 +3,6 @@ package ru.practicum.shareit.booking.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDtoIn;
@@ -13,7 +12,6 @@ import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.util.exception.UnsupportedStatusException;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 import javax.validation.constraints.Min;
 import java.util.List;
 
@@ -32,13 +30,7 @@ public class BookingController {
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public BookingDtoOutAbs create(@RequestHeader(value = USER_ID_HEADER) int userId,
-                                   @Valid @RequestBody BookingDtoIn bookingDtoIn,
-                                   BindingResult result) {
-        if (result.getErrorCount() != 0) {
-            log.error("Validation errors: {}", result.getAllErrors());
-            throw new ValidationException();
-        }
-
+                                   @Valid @RequestBody BookingDtoIn bookingDtoIn) {
         return bookingService.create(bookingDtoIn, userId);
     }
 
