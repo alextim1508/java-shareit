@@ -24,6 +24,7 @@ public class CommentDtoInTest {
     protected void setUp() {
         commentDtoIn = new CommentDtoIn("comment");
     }
+
     @Test
     void toItemDto() throws IOException {
         JsonContent<CommentDtoIn> result = jacksonTester.write(commentDtoIn);
