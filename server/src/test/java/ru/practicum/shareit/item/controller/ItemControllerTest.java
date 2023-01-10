@@ -189,7 +189,7 @@ public class ItemControllerTest extends ItemBaseTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$", is("ForbiddenException")));
+                .andExpect(jsonPath("$", is("Forbidden")));
     }
 
     @SneakyThrows

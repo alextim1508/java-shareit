@@ -2,7 +2,6 @@ package ru.practicum.shareit.request.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemRequestDtoIn;
 import ru.practicum.shareit.request.dto.ItemRequestDtoOutAbs;
@@ -17,7 +16,6 @@ import static ru.practicum.shareit.util.Util.USER_ID_HEADER;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/requests")
-@Validated
 public class ItemRequestController {
 
     private final ItemRequestService itemRequestService;

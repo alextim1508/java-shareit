@@ -40,19 +40,19 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleForbiddenException(Exception e) {
         log.error("{}", e.getClass().getSimpleName());
-        return "ForbiddenException";
+        return "Forbidden";
     }
 
     @ExceptionHandler(ItemIsNotAvailableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleItemIsNotAvailableException(Exception e) {
-        return "ItemIsNotAvailableException";
+        return "Item is not available";
     }
 
     @ExceptionHandler(ActionIsNotAvailableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleActionIsNotAvailableException(Exception e) {
-        return "handleActionIsNotAvailableException";
+        return "Action is not available";
     }
 
     @ExceptionHandler(UnsupportedStateException.class)
@@ -64,7 +64,7 @@ public class ErrorHandler {
     @ExceptionHandler(StatusChangeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleStatusChangeException(StatusChangeException e) {
-        return "StatusChangeException";
+        return "Status Change is not valid";
     }
 
     @ExceptionHandler(Exception.class)

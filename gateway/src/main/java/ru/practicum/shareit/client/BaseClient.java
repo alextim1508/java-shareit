@@ -22,28 +22,33 @@ public class BaseClient {
         this.webClient = webClient;
     }
 
-    protected Mono<ResponseEntity<String>> get(String path, Integer userId, Map<String, Object> parameters) {
+    protected Mono<ResponseEntity<String>> get(
+            String path, Integer userId, Map<String, Object> parameters) {
         return makeAndFetch(HttpMethod.GET, path, userId, mapToMultiValueMap(parameters));
     }
 
-    protected Mono<ResponseEntity<String>> post(String path, Integer userId, Map<String, Object> parameters, String body) {
+    protected Mono<ResponseEntity<String>> post(
+            String path, Integer userId, Map<String, Object> parameters, String body) {
         return makeAndFetch(HttpMethod.POST, path, userId, mapToMultiValueMap(parameters), body);
     }
 
-    protected Mono<ResponseEntity<String>> patch(String path, Integer userId, Map<String, Object> parameters, String body) {
+    protected Mono<ResponseEntity<String>> patch(
+            String path, Integer userId, Map<String, Object> parameters, String body) {
         return makeAndFetch(HttpMethod.PATCH, path, userId, mapToMultiValueMap(parameters), body);
     }
 
-    protected Mono<ResponseEntity<String>> patch(String path, Integer userId, Map<String, Object> parameters) {
+    protected Mono<ResponseEntity<String>> patch(
+            String path, Integer userId, Map<String, Object> parameters) {
         return makeAndFetch(HttpMethod.PATCH, path, userId, mapToMultiValueMap(parameters));
     }
 
-    protected Mono<ResponseEntity<String>> delete(String path, Integer userId, Map<String, Object> parameters) {
+    protected Mono<ResponseEntity<String>> delete(
+            String path, Integer userId, Map<String, Object> parameters) {
         return makeAndFetch(HttpMethod.DELETE, path, userId, mapToMultiValueMap(parameters));
     }
 
-    private Mono<ResponseEntity<String>> makeAndFetch(HttpMethod method, String path, Integer userId,
-                                                      MultiValueMap<String, String> parameters, String body) {
+    private Mono<ResponseEntity<String>> makeAndFetch(
+            HttpMethod method, String path, Integer userId, MultiValueMap<String, String> parameters, String body) {
         return webClient
                 .method(method)
                 .uri(uriBuilder -> uriBuilder.path(path).queryParams(parameters).build())

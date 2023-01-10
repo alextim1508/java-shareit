@@ -9,29 +9,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ValidationException;
 
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
 
-    @ExceptionHandler(ValidationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleValidationException(ValidationException e) {
-        log.error("{} : {}", e.getClass().getSimpleName(), e.getMessage());
-        return e.getMessage();
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler({
+            MethodArgumentNotValidException.class,
+            MissingRequestHeaderException.class,
+    })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.error("{} : {}", e.getClass().getSimpleName(), e.getMessage());
-        return e.getMessage();
-    }
-
-    @ExceptionHandler(MissingRequestHeaderException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleMissingHeaderException(MissingRequestHeaderException e) {
         log.error("{} : {}", e.getClass().getSimpleName(), e.getMessage());
         return "Validation error";
     }
