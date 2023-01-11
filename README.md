@@ -1,6 +1,6 @@
 # shareIt
 
-### Сервис для шеринга вещей
+## Сервис аренды вещей
 
 ### Стек: Spring Boot, Hibernate, Maven, PostgreSql, Lombok, MapStruct, Docker, Unit/Mock
 
