@@ -1,6 +1,8 @@
 # shareIt
-# Сервис для шеринга вещей
-### Spring Boot, Hibernate, Maven, PostgreSql, Lombok, MapStruct, Docker, Unit/Mock
+
+### Сервис для шеринга вещей
+
+### Стек: Spring Boot, Hibernate, Maven, PostgreSql, Lombok, MapStruct, Docker, Unit/Mock
 
 Сервис позволяет пользователям брать вещи в аренду. Реализована микросервисная архитектура:
 
