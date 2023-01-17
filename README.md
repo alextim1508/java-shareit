@@ -1,6 +1,6 @@
 # shareIt
 
-## Сервис аренды вещей
+## Сервис аренды вещей, 2022
 
 ### Стек: Spring Boot, Hibernate, Maven, PostgreSql, Lombok, MapStruct, Docker, Unit/Mock
 
